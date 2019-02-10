@@ -16,6 +16,12 @@ npm install --save react-png-modal
 3. Pass props as shown in the examples, that's it!
 
 ## Features
+
+1. ESC key event listener triggered for desktop users, pressing it will close the modal.
+1. You can place it anywhere on your DOM tree.
+2. Can handle any type of children. It has a max-width of 500px, but it's a property that can be changed by passing a prop named `maxWidth` (see below for all the other available props).
+3. The modal's CSS may be changed without disrupting the functionality of the modal (**(don't change the position: relative though, if you need something absolutely or fixed positioned then do it through a child div element.)**).
+
 Props             |     Functionality
 -------------     |     -------------
 `className`       |     Border styling, transparent styling takes priority over border styling.
@@ -24,9 +30,6 @@ Props             |     Functionality
 `alwaysShow`      |     This property will prevent the cancel button from being rendered. I assume the modal won't receive toggleModal nor closeModal functionalities from being passed. e.g. Commonly used for modals while uploading data to a backend, the modal dismounts when alwaysShow turns false.
 `background`      |     Background styling, transparent styling takes priority over background styling.
 `border`          |     Border styling, transparent styling takes priority over border styling.
-
-1. You can place it anywhere on your DOM tree.
-2. Can handle any type of children. It has a max-width of 500px, but it's a property that can be changed thourgh max
 
 ## Usage for React.js version ^16.8 (see below for previous versions)
 

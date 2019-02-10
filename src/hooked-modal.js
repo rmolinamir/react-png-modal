@@ -12,6 +12,7 @@ import Cancel from './cancel'
  */
 const modal = (props) => {
   const [pageYOffset, setPageYOffset] = useState(null)
+  const [bIsMobile] = useState(isMobile())
 
   const escFunction = (e) => {
     if (e.keyCode === 27) {
@@ -45,15 +46,16 @@ const modal = (props) => {
   useEffect(() => {
     /**
      * returns in useEffect hooks are known as cleanups. They execute when
-     * the component hill unmount or just before useEffect is executed AFTER
+     * the component will unmount or just before useEffect is executed AFTER
      * the first time. This cleanup will remove the body scroll lock.
      */
     return () => {
-      document.removeEventListener('keydown', escFunction, false)
       document.body.style.overflow = null
-      // Enabling mobile scrolling
-      if (isMobile()) {
+      // Enabling mobile scrolling or removing ESC key event listener.
+      if (bIsMobile) {
         onHandleMobileScroll('enable')
+      } else {
+        document.removeEventListener('keydown', escFunction, false)
       }
     }
   }, [])
@@ -62,19 +64,21 @@ const modal = (props) => {
   useEffect(() => {
     // To prevent scrolling when the modal is open
     if (props.show && document.body.style.overflow !== 'hidden') {
-      document.addEventListener('keydown', escFunction, false)
       document.body.style.overflow = 'hidden'
-      // Disabling mobile scrolling
-      if (isMobile()) {
+      // Disabling mobile scrolling or adding ESC key event listener.
+      if (bIsMobile) {
         onHandleMobileScroll('disable')
+      } else {
+        document.addEventListener('keydown', escFunction, false)
       }
     // Only remove overflow null when dismounting modal
     } else if (!props.show && document.body.style.overflow === 'hidden') {
-      document.removeEventListener('keydown', escFunction, false)
       document.body.style.overflow = null
-      // Enabling mobile scrolling
-      if (isMobile()) {
+      // Enabling mobile scrolling or removing ESC key event listener.
+      if (bIsMobile) {
         onHandleMobileScroll('enable')
+      } else {
+        document.removeEventListener('keydown', escFunction, false)
       }
     }
   }, [props.show])

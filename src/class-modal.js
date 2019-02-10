@@ -34,6 +34,7 @@ export default class Modal extends Component {
   constructor(props) {
     super(props)
     this.escFunction = this.escFunction.bind(this)
+    this.isMobile = isMobile()
     document.body.style.overflow = null
   }
 
@@ -81,7 +82,7 @@ export default class Modal extends Component {
       document.addEventListener('keydown', this.escFunction, false)
       document.body.style.overflow = 'hidden'
       // Disabling mobile scrolling
-      if (isMobile()) {
+      if (this.isMobile) {
         this.onHandleMobileScroll('disable')
       }
     // Only remove overflow null when dismounting modal
@@ -89,7 +90,7 @@ export default class Modal extends Component {
       document.removeEventListener('keydown', this.escFunction, false)
       document.body.style.overflow = null
       // Enabling mobile scrolling
-      if (isMobile()) {
+      if (this.isMobile) {
         this.onHandleMobileScroll('enable')
       }
     }
@@ -100,7 +101,7 @@ export default class Modal extends Component {
     document.removeEventListener('keydown', this.escFunction, false)
     document.body.style.overflow = null
     // Enabling mobile scrolling
-    if (isMobile()) {
+    if (this.isMobile) {
       this.onHandleMobileScroll('enable')
     }
   }
