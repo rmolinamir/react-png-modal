@@ -1,6 +1,6 @@
 {
   "name": "react-png-modal",
-  "version": "1.0.8",
+  "version": "1.0.9",
   "description": "Renders a mode that disables the main window but keeps it visible, with a react.js component modal window as a child window in front of it capable of rendering any children passed to it.",
   "author": "rmolinamir",
   "license": "MIT",
