@@ -1,7 +1,7 @@
 import React, { useState, useEffect, useMemo } from 'react'
+import propTypes from 'prop-types'
 // Worker function
 import { isMobile } from './is-mobile'
-import { clearSelection } from './clear-selection'
 // CSS
 import classes from './Modal.css'
 // JSX
@@ -64,8 +64,6 @@ const modal = (props) => {
     if (props.show && document.body.style.overflow !== 'hidden') {
       document.addEventListener('keydown', escFunction, false)
       document.body.style.overflow = 'hidden'
-      // Clears document selection
-      clearSelection()
       // Disabling mobile scrolling
       if (isMobile()) {
         onHandleMobileScroll('disable')
@@ -74,8 +72,6 @@ const modal = (props) => {
     } else if (!props.show && document.body.style.overflow === 'hidden') {
       document.removeEventListener('keydown', escFunction, false)
       document.body.style.overflow = null
-      // Clears document selection
-      clearSelection()
       // Enabling mobile scrolling
       if (isMobile()) {
         onHandleMobileScroll('enable')
@@ -130,6 +126,26 @@ const modal = (props) => {
       )
     }, [props.show, props.children])
   )
+}
+
+modal.propTypes = {
+  closeModal: propTypes.func,
+  toggleModal: propTypes.func,
+  show: propTypes.bool,
+  className: propTypes.any,
+  children: propTypes.element,
+  maxWidth: propTypes.number,
+  // This property will prevent the cancel button from being rendered.
+  // I assume the modal won't receive toggleModal nor closeModal functionalities from being passed.
+  // e.g. Commonly used for modals while uploading data to a backend, the modal dismounts when
+  // alwaysShow turns false.
+  alwaysShow: propTypes.bool,
+  // Removes border and background from the modal. The cancel button turns white.
+  transparent: propTypes.bool,
+  // Modal background styling, transparent styling takes priority over background styling.
+  background: propTypes.string,
+  // Border background styling, transparent styling takes priority over border styling.
+  border: propTypes.string
 }
 
 export default modal

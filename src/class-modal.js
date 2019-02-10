@@ -2,7 +2,6 @@ import React, { Component } from 'react'
 import PropTypes from 'prop-types'
 // Worker function
 import { isMobile } from './is-mobile'
-import { clearSelection } from './clear-selection'
 // CSS
 import classes from './Modal.css'
 // JSX
@@ -81,8 +80,6 @@ export default class Modal extends Component {
     if (this.props.show) {
       document.addEventListener('keydown', this.escFunction, false)
       document.body.style.overflow = 'hidden'
-      // Clears document selection
-      clearSelection()
       // Disabling mobile scrolling
       if (isMobile()) {
         this.onHandleMobileScroll('disable')
@@ -91,8 +88,6 @@ export default class Modal extends Component {
     } else if ((prevProps.show !== this.props.show) && !this.props.show) {
       document.removeEventListener('keydown', this.escFunction, false)
       document.body.style.overflow = null
-      // Clears document selection
-      clearSelection()
       // Enabling mobile scrolling
       if (isMobile()) {
         this.onHandleMobileScroll('enable')

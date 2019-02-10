@@ -15,6 +15,7 @@
     bottom: 0px;
     left: 0px;
     overflow-y: auto;
+    user-select: none;
 }
 
 .ModalWrapper {
@@ -23,12 +24,14 @@
     min-height: 100%;
     width: 100%; 
     background-color: rgba(0,0,0,.55);
+    user-select: none;
 }
 
 .ModalContainer {
     display: flex;
     justify-content: center;
     padding: 60px 12px;
+    user-select: none;
 }
 
 .Modal {
@@ -44,6 +47,10 @@
     left: 0;
     top: 0%;
     box-sizing: border-box;
+}
+
+.Modal * {
+    user-select: text;
 }
 
 .CloseButtonWrapper {
