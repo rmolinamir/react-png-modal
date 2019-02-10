@@ -1,22 +1,8 @@
-import React, { Component } from 'react'
-import PropTypes from 'prop-types'
+import HOOKED_MODAL from './hooked-modal'
+import CLASS_MODAL from './class-modal'
 
-import styles from './styles.css'
+// Classful component
+export const Modal = CLASS_MODAL
 
-export default class ExampleComponent extends Component {
-  static propTypes = {
-    text: PropTypes.string
-  }
-
-  render() {
-    const {
-      text
-    } = this.props
-
-    return (
-      <div className={styles.test}>
-        Example Component: {text}
-      </div>
-    )
-  }
-}
+// Hook component
+export default HOOKED_MODAL
