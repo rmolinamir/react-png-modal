@@ -18,9 +18,9 @@ npm install --save react-png-modal
 ## Features
 
 1. ESC key event listener triggered for desktop users, pressing it will close the modal.
-1. You can place it anywhere on your DOM tree.
+1. You can place it anywhere on your DOM tree and have multiple modals (thing of it like a HOC for whatever you pass as children).
 2. Can handle any type of children. It has a max-width of 500px, but it's a property that can be changed by passing a prop named `maxWidth` (see below for all the other available props).
-3. The modal's CSS may be changed without disrupting the functionality of the modal (**(don't change the position: relative though, if you need something absolutely or fixed positioned then do it through a child div element.)**).
+3. The modal's CSS may be changed without disrupting the functionality of the modal (**don't change the position: relative though or else it'll bad because it will overflow the backdrop, if you need something absolutely positioned then do it through a child div element.**).
 
 Props             |     Functionality
 -------------     |     -------------
