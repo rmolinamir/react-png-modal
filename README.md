@@ -69,11 +69,9 @@ class Example extends Component {
           show={showModal}>
           <h1 style={{textAlign: 'center'}}>Hello world!</h1>
         </Modal>
-          <div style={{textAlign: 'center'}}>
-            <button onClick={this.toggleModal}>Toggle Modal</button>
-            <hr />
-            <h1>Page Content</h1>
-          </div>
+        <div style={{textAlign: 'center'}}>
+          <button onClick={this.toggleModal}>Toggle Modal</button>
+        </div>
       </React.Fragment>
     )
   }
@@ -118,11 +116,9 @@ class Example extends Component {
           show={showModal}>
           <h1 style={{textAlign: 'center'}}>Hello world!</h1>
         </Modal>
-          <div style={{textAlign: 'center'}}>
-            <button onClick={this.toggleModal}>Toggle Modal</button>
-            <hr />
-            <h1>Page Content</h1>
-          </div>
+        <div style={{textAlign: 'center'}}>
+          <button onClick={this.toggleModal}>Toggle Modal</button>
+        </div>
       </React.Fragment>
     )
   }
@@ -152,13 +148,7 @@ const HookedModal = () => {
         <h1 style={{textAlign: 'center'}}>This is the hooked modal alternative!</h1>
       </Modal>
       <div style={{textAlign: 'center'}}>
-        <button onClick={this.toggleModal}>Toggle Modal</button>
-        <hr />
-        <h1>Page</h1>
-        <h2>Content</h2>
-        <h3>Would</h3>
-        <h4>Go</h4>
-        <h5>Here</h5>
+        <button onClick={() => setModalIsHidden(!bIsModalHidden)}>Toggle Modal</button>
       </div>
     </>
   )
