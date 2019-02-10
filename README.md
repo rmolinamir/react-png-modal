@@ -19,13 +19,14 @@ npm install --save react-png-modal
 Props             |     Functionality
 -------------     |     -------------
 `className`       |     Border styling, transparent styling takes priority over border styling.
+`maxWidth`        |     Modal's max-width, defaults to 500px on devices with a screen width higher or equal than 600px (min-width: 600px).
 `transparent`     |     Removes the border and background from the modal. The cancel button turns white (the backdrop's background will always be (rgba(0,0,0,.55))).
 `alwaysShow`      |     This property will prevent the cancel button from being rendered. I assume the modal won't receive toggleModal nor closeModal functionalities from being passed. e.g. Commonly used for modals while uploading data to a backend, the modal dismounts when alwaysShow turns false.
 `background`      |     Background styling, transparent styling takes priority over background styling.
 `border`          |     Border styling, transparent styling takes priority over border styling.
 
 1. You can place it anywhere on your DOM tree.
-2. Can handle any type of childre. It has a max-width of 500px, but it's a property that can be changed
+2. Can handle any type of children. It has a max-width of 500px, but it's a property that can be changed thourgh max
 
 ## Usage for React.js version ^16.8 (see below for previous versions)
 

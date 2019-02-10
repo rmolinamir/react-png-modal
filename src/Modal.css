@@ -15,7 +15,6 @@
     bottom: 0px;
     left: 0px;
     overflow-y: auto;
-    user-select: none;
 }
 
 .ModalWrapper {
@@ -72,7 +71,7 @@
     .Modal {
         height: auto;
         top: 10%;
-        max-width: 450px;
+        max-width: 500px;
     }
 }
 
