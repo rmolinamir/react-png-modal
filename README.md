@@ -79,10 +79,12 @@ class Example extends Component {
 
 ## Usage for React.js version ^15.0
 
+[![Edit React Plug N' Go Modal (React.js 16.6.0)](https://codesandbox.io/static/img/play-codesandbox.svg)](https://codesandbox.io/s/pplxlvvoqx)
+
 ```jsx
 import React, { Component } from 'react'
 
-import { EasyModal as Modal } from 'react-png-modal'
+import { Modal } from 'react-png-modal'
 
 class Example extends Component {
   state = {
