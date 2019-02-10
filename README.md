@@ -18,9 +18,9 @@ npm install --save react-png-modal
 ## Features
 
 1. ESC key event listener triggered for desktop users, pressing it will close the modal.
-1. You can place it anywhere on your DOM tree and have multiple modals (thing of it like a HOC for whatever you pass as children).
+1. You can place it anywhere on your DOM tree and have multiple modals (think of it like a HOC for whatever you pass as children).
 2. Can handle any type of children. It has a max-width of 500px, but it's a property that can be changed by passing a prop named `maxWidth` (see below for all the other available props).
-3. The modal's CSS may be changed without disrupting the functionality of the modal (**don't change the position: relative though or else it'll bad because it will overflow the backdrop, if you need something absolutely positioned then do it through a child div element.**).
+3. The modal's CSS may be changed without disrupting the functionality of the modal (**don't change the position: relative though or else it'll look bad because it will overflow the backdrop, if you need something absolutely positioned then do it through a child div element.**).
 
 Props             |     Functionality
 -------------     |     -------------
@@ -82,10 +82,12 @@ class Example extends Component {
 
 [![Edit React Plug N' Go Modal (React.js 16.6.0)](https://codesandbox.io/static/img/play-codesandbox.svg)](https://codesandbox.io/s/pplxlvvoqx)
 
+### (!) DON'T use the default export if you're not using React.js version 16.8.0 or more.
+
 ```jsx
 import React, { Component } from 'react'
 
-import { Modal } from 'react-png-modal'
+import { Modal } from 'react-png-modal' // You can't use the default export if you're not using the latest React.js v^16.8.0
 
 class Example extends Component {
   state = {
