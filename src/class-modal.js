@@ -81,6 +81,8 @@ export default class Modal extends Component {
     if (this.props.show) {
       document.addEventListener('keydown', this.escFunction, false)
       document.body.style.overflow = 'hidden'
+      // Clears document selection
+      clearSelection()
       // Disabling mobile scrolling
       if (isMobile()) {
         this.onHandleMobileScroll('disable')
@@ -102,8 +104,6 @@ export default class Modal extends Component {
   componentWillUnmount() {
     document.removeEventListener('keydown', this.escFunction, false)
     document.body.style.overflow = null
-    // Clears document selection
-    clearSelection()
     // Enabling mobile scrolling
     if (isMobile()) {
       this.onHandleMobileScroll('enable')

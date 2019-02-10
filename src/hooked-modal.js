@@ -64,6 +64,8 @@ const modal = (props) => {
     if (props.show && document.body.style.overflow !== 'hidden') {
       document.addEventListener('keydown', escFunction, false)
       document.body.style.overflow = 'hidden'
+      // Clears document selection
+      clearSelection()
       // Disabling mobile scrolling
       if (isMobile()) {
         onHandleMobileScroll('disable')
