@@ -16,6 +16,7 @@
     left: 0px;
     overflow-y: auto;
     user-select: none;
+    animation: fade-in ease 200ms;
 }
 
 .ModalWrapper {
@@ -48,6 +49,7 @@
     top: 0%;
     box-sizing: border-box;
     user-select: none;
+    opacity: 0;
 }
 
 .CloseButtonWrapper {
@@ -86,5 +88,17 @@
         height: 100%;
         left: 0;
         top: 0%;
+    }
+}
+
+@keyframes fade-in {
+    0% {
+        opacity: 0;
+    }
+    66% {
+        opacity: 0;
+    }
+    100% {
+        opacity: 1;
     }
 }
