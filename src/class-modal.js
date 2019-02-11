@@ -13,17 +13,16 @@ import Cancel from './cancel'
 export default class Modal extends Component {
   static propTypes = {
     closeModal: PropTypes.func,
-    toggleModal: PropTypes.func,
     show: PropTypes.bool.isRequired,
     className: PropTypes.any,
     children: PropTypes.any,
     maxWidth: PropTypes.number,
     // Reference to element to modify its paddingRight when the scrollbar disappears
     bodyRef: PropTypes.element,
-    // shouldEnableContentJump boolean that prevents contentJump function from executing if true.
-    shouldEnableContentJump: PropTypes.bool,
+    // shouldContentJump boolean that prevents contentJump function from executing if true.
+    shouldContentJump: PropTypes.bool,
     // This property will prevent the cancel button from being rendered.
-    // I assume the modal won't receive toggleModal nor closeModal functionalities from being passed.
+    // I assume the modal won't receive closeModal functionalities from being passed.
     // e.g. Commonly used for modals while uploading data to a backend, the modal dismounts when
     // alwaysShow turns false.
     alwaysShow: PropTypes.bool,
@@ -118,8 +117,8 @@ export default class Modal extends Component {
           this.mobileScrollHandler(handler)
         } else {
           document.removeEventListener('keydown', this.escFunction, false)
-          // Prevents content from jumping when the scroll bar disappears if shouldEnableContentJump is false.
-          if (!this.props.shouldEnableContentJump) {
+          // Prevents content from jumping when the scroll bar disappears if shouldContentJump is false.
+          if (!this.props.shouldContentJump) {
             this.contentJumpHandler(handler)
           }
         }
@@ -135,8 +134,8 @@ export default class Modal extends Component {
           this.mobileScrollHandler(handler)
         } else {
           document.addEventListener('keydown', this.escFunction, false)
-          // Prevents content from jumping when the scroll bar disappears if shouldEnableContentJump is false.
-          if (!this.props.shouldEnableContentJump) {
+          // Prevents content from jumping when the scroll bar disappears if shouldContentJump is false.
+          if (!this.props.shouldContentJump) {
             this.contentJumpHandler(handler, scrollBarWidth)
           }
         }
@@ -193,7 +192,7 @@ export default class Modal extends Component {
                   <div className={classes.CloseButtonWrapper}>
                     <button
                       type='button'
-                      onClick={this.props.toggleModal}
+                      onClick={this.props.closeModal}
                       className={classes.CancelButton}
                       aria-busy='false' >
                       <Cancel fill={this.props.transparent ? '#FFF' : null} />

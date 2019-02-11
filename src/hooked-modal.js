@@ -81,8 +81,8 @@ const modal = (props) => {
           mobileScrollHandler(handler)
         } else {
           document.removeEventListener('keydown', escFunction, false)
-          // Prevents content from jumping when the scroll bar disappears if shouldEnableContentJump is false.
-          if (!props.shouldEnableContentJump) {
+          // Prevents content from jumping when the scroll bar disappears if shouldContentJump is false.
+          if (!props.shouldContentJump) {
             contentJumpHandler(handler)
           }
         }
@@ -98,8 +98,8 @@ const modal = (props) => {
           mobileScrollHandler(handler)
         } else {
           document.addEventListener('keydown', escFunction, false)
-          // Prevents content from jumping when the scroll bar disappears if shouldEnableContentJump is false.
-          if (!props.shouldEnableContentJump) {
+          // Prevents content from jumping when the scroll bar disappears if shouldContentJump is false.
+          if (!props.shouldContentJump) {
             contentJumpHandler(handler, scrollBarWidth)
           }
         }
@@ -162,7 +162,7 @@ const modal = (props) => {
                     <div className={classes.CloseButtonWrapper}>
                       <button
                         type='button'
-                        onClick={props.toggleModal}
+                        onClick={props.closeModal}
                         className={classes.CancelButton}
                         aria-busy='false' >
                         <Cancel fill={props.transparent ? '#FFF' : null} />
@@ -183,17 +183,16 @@ const modal = (props) => {
 
 modal.propTypes = {
   closeModal: propTypes.func,
-  toggleModal: propTypes.func,
   show: propTypes.bool.isRequired,
   className: propTypes.any,
   children: propTypes.any,
   maxWidth: propTypes.number,
   // Reference to element to modify its paddingRight when the scrollbar disappears
   bodyRef: propTypes.element,
-  // shouldEnableContentJump boolean that prevents contentJump function from executing if true.
-  shouldEnableContentJump: propTypes.bool,
+  // shouldContentJump boolean that prevents contentJump function from executing if true.
+  shouldContentJump: propTypes.bool,
   // This property will prevent the cancel button from being rendered.
-  // I assume the modal won't receive toggleModal nor closeModal functionalities from being passed.
+  // I assume the modal won't receive closeModal functionalities from being passed.
   // e.g. Commonly used for modals while uploading data to a backend, the modal dismounts when
   // alwaysShow turns false.
   alwaysShow: propTypes.bool,

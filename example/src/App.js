@@ -30,7 +30,6 @@ class App extends Component {
     return (
       <React.Fragment>
         <Modal
-          toggleModal={this.toggleModal}
           closeModal={this.closeModal}
           show={showModal}>
           <h1 style={{textAlign: 'center'}}>Hello world!</h1>

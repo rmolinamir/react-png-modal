@@ -16,7 +16,7 @@
     left: 0px;
     overflow-y: auto;
     user-select: none;
-    animation: fade-in ease 200ms;
+    animation: fade-in ease 100ms;
 }
 
 .ModalWrapper {
@@ -93,9 +93,6 @@
 
 @keyframes fade-in {
     0% {
-        opacity: 0;
-    }
-    66% {
         opacity: 0;
     }
     100% {

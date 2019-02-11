@@ -12,24 +12,28 @@ npm install --save react-png-modal
 
 ## Instructions
 1. Declare and define a state with a boolean variable that will handle the Modal rendering inside a classful or functional 'hooked' component.
-2. Create a toggle and close setters for said boolean, these setters will need to be passed down to the modal. (Q. Why a toggle AND a close? A. To avoid side effects.)
+2. Create close setter for said boolean, these setter will need to be passed down to the modal.
 3. Pass props as shown in the examples, that's it!
 
 ## Features
 
 1. ESC key event listener triggered for desktop users, pressing it will close the modal.
-1. You can place it anywhere on your DOM tree and have multiple modals (think of it like a HOC for whatever you pass as children).
-2. Can handle any type of children. It has a max-width of 500px, but it's a property that can be changed by passing a prop named `maxWidth` (see below for all the other available props).
-3. The modal's CSS may be changed without disrupting the functionality of the modal (**don't change the position: relative though or else it'll look bad because it will overflow the backdrop, if you need something absolutely positioned then do it through a child div element.**).
+2. You can place it anywhere on your DOM tree and have multiple modals (think of it like a HOC for whatever you pass as children).
+3. Can handle any type of children. It has a max-width of 500px, but it's a property that can be changed by passing a prop named `maxWidth` (see below for all the other available props).
+4. The modal's CSS may be changed without disrupting the functionality of the modal (**don't change the position: relative though or else it'll look bad because it will overflow the backdrop, if you need something absolutely positioned then do it through a child div element.**).
+5. Removes parasitic page content jump to the right after the modal is opened (this happens because the scrollbar may disappear). If you used create-react-app, chances are this feature will work correctly by default because it targets the div with an id equal to `root`. If there are none then it will target the body. **However, you can pass a `bodyRef` prop (type element) to target that reference instead** (e.g. if your "root" div's id is not equal to `root` but instead is equal to `app`, then you should pass the reference as `document.getElementById('app)`). **You can disable this feature by passing the prop `shouldContentJump`, more details about props down below.**.
 
-Props             |     Functionality
--------------     |     -------------
-`className`       |     You use your own desired CSS class for the modal window by passing said class as a prop.
-`maxWidth`        |     Modal's max-width, defaults to 500px on devices with a screen width higher or equal than 600px (min-width: 600px).
-`transparent`     |     Removes the border and background from the modal. The cancel button turns white (the backdrop's background will always be (rgba(0,0,0,.55))).
-`alwaysShow`      |     This property will prevent the cancel button from being rendered. I assume the modal won't receive toggleModal nor closeModal functionalities from being passed. e.g. Commonly used for modals while uploading data to a backend, the modal dismounts when alwaysShow turns false.
-`background`      |     Background styling, transparent styling takes priority over background styling.
-`border`          |     Border styling, transparent styling takes priority over border styling.
+Props               |       Functionality
+-------------       |       -------------
+`shouldContentJump` |       Pass this prop as **true** if you want content jumps when opening the modal (not recommended).
+`bodyRef`           |       A reference to an element for contentJump to work correctly (not always necessary, read Features point 5 for more details), make sure that's it's the element and not the whole React reference object.
+`closeModal`        |       Callback passed to the modal to close it, should change the 'show' prop's boolean value to false.
+`className`         |       You can use your own desired CSS class for the modal window by passing said class as a prop (you'll be able to change everything, such as background, border, etc.).
+`maxWidth`          |       Modal's max-width, defaults to 500px on devices with a screen width higher or equal than 600px (min-width: 600px).
+`transparent`       |       Removes the border and background from the modal. The cancel button turns white (the backdrop's background will always be (rgba(0,0,0,.55))).
+`alwaysShow`        |       This property will prevent the cancel button from being rendered. I assume the modal won't receive toggleModal nor closeModal functionalities from being passed. e.g. Commonly used for modals while uploading data to a backend, the modal dismounts when alwaysShow turns false.
+`background`        |       Background styling, transparent styling takes priority over background styling.
+`border`            |       Border styling, transparent styling takes priority over border styling.
 
 ## Usage for React.js version ^16.8 (see below for previous versions)
 
@@ -67,9 +71,9 @@ class Example extends Component {
           toggleModal={this.toggleModal}
           closeModal={this.closeModal}
           show={showModal}>
-          <h1 style={{textAlign: 'center'}}>Hello world!</h1>
+          <h1>Hello world!</h1>
         </Modal>
-        <div style={{textAlign: 'center'}}>
+        <div>
           <button onClick={this.toggleModal}>Toggle Modal</button>
         </div>
       </React.Fragment>
@@ -116,9 +120,9 @@ class Example extends Component {
           toggleModal={this.toggleModal}
           closeModal={this.closeModal}
           show={showModal}>
-          <h1 style={{textAlign: 'center'}}>Hello world!</h1>
+          <h1>Hello world!</h1>
         </Modal>
-        <div style={{textAlign: 'center'}}>
+        <div>
           <button onClick={this.toggleModal}>Toggle Modal</button>
         </div>
       </React.Fragment>
@@ -147,9 +151,9 @@ const HookedModal = () => {
         toggleModal={() => setModalIsHidden(!bIsModalHidden)}
         closeModal={() => setModalIsHidden(true)}
         show={showModal}>
-        <h1 style={{textAlign: 'center'}}>This is the hooked modal alternative!</h1>
+        <h1>This is the hooked modal alternative!</h1>
       </Modal>
-      <div style={{textAlign: 'center'}}>
+      <div>
         <button onClick={() => setModalIsHidden(!bIsModalHidden)}>Toggle Modal</button>
       </div>
     </>
@@ -159,8 +163,7 @@ const HookedModal = () => {
 
 ## Pending
 
-- Focus trapping within the modal is not yet implemented, but will be in the near future with the help of **focus-trap-react**.
-- Optionally remove parasitic page content to the right after modal is toggled (this happens because the scrollbar may disappear). 
+- Focus trapping within the modal is not yet implemented, but will be in the near future with the help of **focus-trap-react**. 
 
 ## License
 
