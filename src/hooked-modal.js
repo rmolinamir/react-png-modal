@@ -81,8 +81,8 @@ const modal = (props) => {
           mobileScrollHandler(handler)
         } else {
           document.removeEventListener('keydown', escFunction, false)
-          // Prevents content from jumping when the scroll bar disappears if shouldAvoidContentJump is false.
-          if (!props.shouldAvoidContentJump) {
+          // Prevents content from jumping when the scroll bar disappears if shouldEnableContentJump is false.
+          if (!props.shouldEnableContentJump) {
             contentJumpHandler(handler)
           }
         }
@@ -98,8 +98,8 @@ const modal = (props) => {
           mobileScrollHandler(handler)
         } else {
           document.addEventListener('keydown', escFunction, false)
-          // Prevents content from jumping when the scroll bar disappears if shouldAvoidContentJump is false.
-          if (!props.shouldAvoidContentJump) {
+          // Prevents content from jumping when the scroll bar disappears if shouldEnableContentJump is false.
+          if (!props.shouldEnableContentJump) {
             contentJumpHandler(handler, scrollBarWidth)
           }
         }
@@ -190,8 +190,8 @@ modal.propTypes = {
   maxWidth: propTypes.number,
   // Reference to element to modify its paddingRight when the scrollbar disappears
   bodyRef: propTypes.element,
-  // shouldAvoidContentJump boolean that prevents contentJump function from executing if true.
-  shouldAvoidContentJump: propTypes.bool,
+  // shouldEnableContentJump boolean that prevents contentJump function from executing if true.
+  shouldEnableContentJump: propTypes.bool,
   // This property will prevent the cancel button from being rendered.
   // I assume the modal won't receive toggleModal nor closeModal functionalities from being passed.
   // e.g. Commonly used for modals while uploading data to a backend, the modal dismounts when

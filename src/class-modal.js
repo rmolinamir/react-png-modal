@@ -20,8 +20,8 @@ export default class Modal extends Component {
     maxWidth: PropTypes.number,
     // Reference to element to modify its paddingRight when the scrollbar disappears
     bodyRef: PropTypes.element,
-    // shouldAvoidContentJump boolean that prevents contentJump function from executing if true.
-    shouldAvoidContentJump: PropTypes.bool,
+    // shouldEnableContentJump boolean that prevents contentJump function from executing if true.
+    shouldEnableContentJump: PropTypes.bool,
     // This property will prevent the cancel button from being rendered.
     // I assume the modal won't receive toggleModal nor closeModal functionalities from being passed.
     // e.g. Commonly used for modals while uploading data to a backend, the modal dismounts when
@@ -118,8 +118,8 @@ export default class Modal extends Component {
           this.mobileScrollHandler(handler)
         } else {
           document.removeEventListener('keydown', this.escFunction, false)
-          // Prevents content from jumping when the scroll bar disappears if shouldAvoidContentJump is false.
-          if (!this.props.shouldAvoidContentJump) {
+          // Prevents content from jumping when the scroll bar disappears if shouldEnableContentJump is false.
+          if (!this.props.shouldEnableContentJump) {
             this.contentJumpHandler(handler)
           }
         }
@@ -135,8 +135,8 @@ export default class Modal extends Component {
           this.mobileScrollHandler(handler)
         } else {
           document.addEventListener('keydown', this.escFunction, false)
-          // Prevents content from jumping when the scroll bar disappears if shouldAvoidContentJump is false.
-          if (!this.props.shouldAvoidContentJump) {
+          // Prevents content from jumping when the scroll bar disappears if shouldEnableContentJump is false.
+          if (!this.props.shouldEnableContentJump) {
             this.contentJumpHandler(handler, scrollBarWidth)
           }
         }
