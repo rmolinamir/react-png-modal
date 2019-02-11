@@ -14,6 +14,10 @@ npm install --save react-png-modal
 1. Declare and define a state with a boolean variable that will handle the Modal rendering inside a classful or functional 'hooked' component.
 2. Create close setter for said boolean, these setter will need to be passed down to the modal.
 3. Pass props as shown in the examples, that's it!
+4. The modal will close after:
+- Pressing the ESC key on desktop.
+- Clicking the X button on the modal window.
+- Clicking anywhere on the backdrop overlay.
 
 ## Features
 
