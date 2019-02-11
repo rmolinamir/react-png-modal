@@ -68,7 +68,6 @@ class Example extends Component {
     return (
       <React.Fragment>
         <Modal
-          toggleModal={this.toggleModal}
           closeModal={this.closeModal}
           show={showModal}>
           <h1>Hello world!</h1>
@@ -117,7 +116,6 @@ class Example extends Component {
     return (
       <React.Fragment>
         <Modal
-          toggleModal={this.toggleModal}
           closeModal={this.closeModal}
           show={showModal}>
           <h1>Hello world!</h1>
@@ -148,7 +146,6 @@ const HookedModal = () => {
   return (
     <>
       <Modal
-        toggleModal={() => setModalIsHidden(!bIsModalHidden)}
         closeModal={() => setModalIsHidden(true)}
         show={showModal}>
         <h1>This is the hooked modal alternative!</h1>
