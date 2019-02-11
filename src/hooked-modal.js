@@ -183,7 +183,7 @@ const modal = (props) => {
 
 modal.propTypes = {
   closeModal: propTypes.func,
-  show: propTypes.bool.isRequired,
+  show: propTypes.bool,
   className: propTypes.any,
   children: propTypes.any,
   maxWidth: propTypes.number,

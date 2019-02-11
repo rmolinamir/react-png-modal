@@ -13,7 +13,7 @@ import Cancel from './cancel'
 export default class Modal extends Component {
   static propTypes = {
     closeModal: PropTypes.func,
-    show: PropTypes.bool.isRequired,
+    show: PropTypes.bool,
     className: PropTypes.any,
     children: PropTypes.any,
     maxWidth: PropTypes.number,
