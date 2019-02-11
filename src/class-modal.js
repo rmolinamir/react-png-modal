@@ -76,24 +76,9 @@ export default class Modal extends Component {
     }
   }
 
-  contentJumpHandler = (handler) => {
+  contentJumpHandler = (handler, scrollBarWidth) => {
     switch (handler) {
       case 'enable':
-        const documentWidth = document.documentElement.clientWidth
-        const windowWidth = window.innerWidth
-        const scrollBarWidth = windowWidth - documentWidth
-        // Add scrollBarWidth to paddingRight property to the bodyRef prop if it exists, otherwise add it to
-        // a div with an id equal to 'root', otherwise add it to body.
-        if (this.props.bodyRef) {
-          const el = this.props.bodyRef
-          el.style.paddingRight = scrollBarWidth
-        } else if (document.getElementById('root')) {
-          document.getElementById('root').style.paddingRight = scrollBarWidth
-        } else {
-          document.body.style.paddingRight = scrollBarWidth
-        }
-        break
-      case 'disable':
         // Remove scrollBarWidth to paddingRight property to the bodyRef prop if it exists, otherwise add it to
         // a div with an id equal to 'root', otherwise add it to body.
         if (this.props.bodyRef) {
@@ -103,6 +88,19 @@ export default class Modal extends Component {
           document.getElementById('root').style.paddingRight = null
         } else {
           document.body.style.paddingRight = null
+        }
+        break
+      case 'disable':
+        // Add scrollBarWidth to paddingRight property to the bodyRef prop if it exists, otherwise add it to
+        // a div with an id equal to 'root', otherwise add it to body.
+        if (this.props.bodyRef) {
+          const el = this.props.bodyRef
+          el.style.paddingRight = [scrollBarWidth, 'px'].join('')
+        } else if (document.getElementById('root')) {
+          console.log(document.getElementById('root'))
+          document.getElementById('root').style.paddingRight = [scrollBarWidth, 'px'].join('')
+        } else {
+          document.body.style.paddingRight = [scrollBarWidth, 'px'].join('')
         }
         break
       default:
@@ -127,6 +125,9 @@ export default class Modal extends Component {
         }
         break
       case 'disable':
+        const documentWidth = document.documentElement.clientWidth
+        const windowWidth = window.innerWidth
+        const scrollBarWidth = windowWidth - documentWidth
         // Add overflow hidden to lock body scroll
         document.body.style.overflow = 'hidden'
         // Disabling mobile scrolling or adding ESC key event listener.
@@ -136,7 +137,7 @@ export default class Modal extends Component {
           document.addEventListener('keydown', this.escFunction, false)
           // Prevents content from jumping when the scroll bar disappears if shouldAvoidContentJump is false.
           if (!this.props.shouldAvoidContentJump) {
-            this.contentJumpHandler(handler)
+            this.contentJumpHandler(handler, scrollBarWidth)
           }
         }
         break

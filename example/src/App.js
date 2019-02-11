@@ -35,7 +35,7 @@ class App extends Component {
           show={showModal}>
           <h1 style={{textAlign: 'center'}}>Hello world!</h1>
         </Modal>
-        <div style={{textAlign: 'center'}}>
+        <div className='App'>
           <button onClick={this.toggleModal}>Toggle Modal</button>
           <hr />
           <h1>Page</h1>
@@ -43,6 +43,8 @@ class App extends Component {
           <h3>Would</h3>
           <h4>Go</h4>
           <h5>Here</h5>
+          <hr />
+          <button onClick={this.toggleModal}>Toggle Modal</button>
         </div>
       </React.Fragment>
     )

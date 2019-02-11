@@ -1,5 +1,35 @@
 body {
-  margin: 0;
+  margin: 12px 0;
   padding: 0;
+  background: lightyellow;
+}
+
+button {
+  position: relative;
+  outline: none;
+  cursor: pointer;
+  font: inherit;
+  width: fit-content;
+  user-select: none;
+  border: 1px solid transparent;
+  line-height: 1.5;
+  border-radius: 0.25rem;
+  color: #fff;
+  background-color: #484848;
+  border-color: #484848;
+}
+
+.App {
   font-family: sans-serif;
+  text-align: center;
+  min-height: 200vh;
+}
+
+h1,
+h2,
+h3,
+h4,
+h5,
+h6 {
+  margin: 56px 0;
 }
