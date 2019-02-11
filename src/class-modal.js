@@ -14,10 +14,14 @@ export default class Modal extends Component {
   static propTypes = {
     closeModal: PropTypes.func,
     toggleModal: PropTypes.func,
-    show: PropTypes.bool,
+    show: PropTypes.bool.isRequired,
     className: PropTypes.any,
-    children: PropTypes.element,
+    children: PropTypes.any,
     maxWidth: PropTypes.number,
+    // Reference to element to modify its paddingRight when the scrollbar disappears
+    bodyRef: PropTypes.element,
+    // shouldAvoidContentJump boolean that prevents contentJump function from executing if true.
+    shouldAvoidContentJump: PropTypes.bool,
     // This property will prevent the cancel button from being rendered.
     // I assume the modal won't receive toggleModal nor closeModal functionalities from being passed.
     // e.g. Commonly used for modals while uploading data to a backend, the modal dismounts when
@@ -49,7 +53,7 @@ export default class Modal extends Component {
     }
   }
 
-  onHandleMobileScroll = (handler) => {
+  mobileScrollHandler = (handler) => {
     switch (handler) {
       case 'enable':
         // Enabling mobile scrolling
@@ -72,6 +76,75 @@ export default class Modal extends Component {
     }
   }
 
+  contentJumpHandler = (handler) => {
+    switch (handler) {
+      case 'enable':
+        const documentWidth = document.documentElement.clientWidth
+        const windowWidth = window.innerWidth
+        const scrollBarWidth = windowWidth - documentWidth
+        // Add scrollBarWidth to paddingRight property to the bodyRef prop if it exists, otherwise add it to
+        // a div with an id equal to 'root', otherwise add it to body.
+        if (this.props.bodyRef) {
+          const el = this.props.bodyRef
+          el.style.paddingRight = scrollBarWidth
+        } else if (document.getElementById('root')) {
+          document.getElementById('root').style.paddingRight = scrollBarWidth
+        } else {
+          document.body.style.paddingRight = scrollBarWidth
+        }
+        break
+      case 'disable':
+        // Remove scrollBarWidth to paddingRight property to the bodyRef prop if it exists, otherwise add it to
+        // a div with an id equal to 'root', otherwise add it to body.
+        if (this.props.bodyRef) {
+          const el = this.props.bodyRef
+          el.style.paddingRight = null
+        } else if (document.getElementById('root')) {
+          document.getElementById('root').style.paddingRight = null
+        } else {
+          document.body.style.paddingRight = null
+        }
+        break
+      default:
+        // do nothing
+    }
+  }
+
+  bodyScrollHandler = (handler) => {
+    switch (handler) {
+      case 'enable':
+        // Remove overflow null to unlock body scroll
+        document.body.style.overflow = null
+        // Enabling mobile scrolling or removing ESC key event listener.
+        if (this.isMobile) {
+          this.mobileScrollHandler(handler)
+        } else {
+          document.removeEventListener('keydown', this.escFunction, false)
+          // Prevents content from jumping when the scroll bar disappears if shouldAvoidContentJump is false.
+          if (!this.props.shouldAvoidContentJump) {
+            this.contentJumpHandler(handler)
+          }
+        }
+        break
+      case 'disable':
+        // Add overflow hidden to lock body scroll
+        document.body.style.overflow = 'hidden'
+        // Disabling mobile scrolling or adding ESC key event listener.
+        if (this.isMobile) {
+          this.mobileScrollHandler(handler)
+        } else {
+          document.addEventListener('keydown', this.escFunction, false)
+          // Prevents content from jumping when the scroll bar disappears if shouldAvoidContentJump is false.
+          if (!this.props.shouldAvoidContentJump) {
+            this.contentJumpHandler(handler)
+          }
+        }
+        break
+      default:
+        // do nothing
+    }
+  }
+
   shouldComponentUpdate(nextProps) {
     return nextProps.show !== this.props.show || nextProps.children !== this.props.children
   }
@@ -79,31 +152,16 @@ export default class Modal extends Component {
   componentDidUpdate (prevProps) {
     // To prevent scrolling when the modal is open
     if (this.props.show) {
-      document.addEventListener('keydown', this.escFunction, false)
-      document.body.style.overflow = 'hidden'
-      // Disabling mobile scrolling
-      if (this.isMobile) {
-        this.onHandleMobileScroll('disable')
-      }
-    // Only remove overflow null when dismounting modal
+      this.bodyScrollHandler('disable')
+    // Only remove overflow null when unmounting modal
     } else if ((prevProps.show !== this.props.show) && !this.props.show) {
-      document.removeEventListener('keydown', this.escFunction, false)
-      document.body.style.overflow = null
-      // Enabling mobile scrolling
-      if (this.isMobile) {
-        this.onHandleMobileScroll('enable')
-      }
+      this.bodyScrollHandler('enable')
     }
   }
 
-  // Removing body scroll lock on dismount
+  // Removing body scroll lock on unmount
   componentWillUnmount() {
-    document.removeEventListener('keydown', this.escFunction, false)
-    document.body.style.overflow = null
-    // Enabling mobile scrolling
-    if (this.isMobile) {
-      this.onHandleMobileScroll('enable')
-    }
+    this.bodyScrollHandler('enable')
   }
 
   render() {
