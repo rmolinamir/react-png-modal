@@ -10,7 +10,20 @@
 npm install --save react-png-modal
 ```
 
+## Showcase
+
+### Servify
+
+![Alt Text](https://media.giphy.com/media/5UMF6RMefKDFWMKJ3Y/giphy.gif)
+
+[Servify Website](https://www.servifyapp.com "Servify's Homepage")
+
+### My Personal Website
+
+![Alt Text](https://media.giphy.com/media/11Rm1aK7P6fwcuY8jh/giphy.gif)
+
 ## Instructions
+
 1. Declare and define a state with a boolean variable that will handle the Modal rendering inside a classful or functional 'hooked' component.
 2. Create close setter for said boolean, these setter will need to be passed down to the modal.
 3. Pass props as shown in the examples, that's it!
