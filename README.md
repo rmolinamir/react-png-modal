@@ -12,13 +12,11 @@ npm install --save react-png-modal
 
 ## Showcase
 
-### Servify
+### [Servify](https://www.servifyapp.com "Servify Website")
 
 ![Alt Text](https://media.giphy.com/media/5UMF6RMefKDFWMKJ3Y/giphy.gif)
 
-[Servify Website](https://www.servifyapp.com "Servify's Homepage")
-
-### My Personal Website
+### [My Personal Website](https://robertmolinamir.firebaseapp.com/ "Robert Molina")
 
 ![Alt Text](https://media.giphy.com/media/11Rm1aK7P6fwcuY8jh/giphy.gif)
 
@@ -39,6 +37,8 @@ npm install --save react-png-modal
 3. Can handle any type of children. It has a max-width of 500px, but it's a property that can be changed by passing a prop named `maxWidth` (see below for all the other available props).
 4. The modal's CSS may be changed without disrupting the functionality of the modal (**don't change the position: relative though or else it'll look bad because it will overflow the backdrop, if you need something absolutely positioned then do it through a child div element.**).
 5. Removes parasitic page content jump to the right after the modal is opened (this happens because the scrollbar may disappear). If you used create-react-app, chances are this feature will work correctly by default because it targets the div with an id equal to `root`. If there are none then it will target the body. **However, you can pass a `bodyRef` prop (type element) to target that reference instead** (e.g. if your "root" div's id is not equal to `root` but instead is equal to `app`, then you should pass the reference as `document.getElementById('app)`). **You can disable this feature by passing the prop `shouldContentJump`, more details about props down below.**.
+
+## Props
 
 Props               |       Functionality
 -------------       |       -------------
