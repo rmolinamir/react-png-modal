@@ -66,11 +66,17 @@ enum EHandlers {
  * Hook component
  */
 const modal = (props: IModalProps) => {
-  const [bShouldMount, setShouldMount] = useState<boolean>(false)
+  const [bIsMobile] = useState<boolean>(isMobile())
+
+  const [bDidMount, setDidMount] = useState<boolean>(props.alwaysShow)
+  const [bShouldMount, setShouldMount] = useState<boolean>(props.alwaysShow)
   const [bShouldUnmount, setShouldUnmount] = useState<boolean>(false)
   const [UnmountTimeout, setUnmountTimeout] = useState()
+
+  const [wrapperClass, setWrapperClass] = useState<string>(classes.Null)
   const [pageYOffset, setPageYOffset] = useState<number>(0)
-  const [bIsMobile] = useState<boolean>(isMobile())
+
+  const transformDuration = 500
 
   const escFunction = (event: KeyboardEvent): void => {
     if (event.keyCode === 27) {
@@ -95,8 +101,6 @@ const modal = (props: IModalProps) => {
         document.body.style.width = '100%'
         setPageYOffset(YOffset)
         break
-      default:
-        // do nothing
     }
   }
 
@@ -134,8 +138,6 @@ const modal = (props: IModalProps) => {
           document.body.style.paddingRight = [scrollBarWidth, 'px'].join('')
         }
         break
-      default:
-        // do nothing
     }
   }
 
@@ -172,8 +174,6 @@ const modal = (props: IModalProps) => {
           }
         }
         break
-      default:
-        // do nothing
     }
   }
 
@@ -190,48 +190,54 @@ const modal = (props: IModalProps) => {
     }
   }, [])
 
+  // Similar to componentDidUpdate. Watches for changes of prop.show
   useEffect(() => {
-    console.log(props.show)
-    console.log(bShouldMount)
-    setShouldMount(props.show)
-    if (!props.show) {
-      setUnmountTimeout(
-        setTimeout(() => {
-          console.log('inside setTimeout', 2000)
-          console.log('bShouldUnmount', bShouldUnmount)
-          setShouldUnmount(props.show)
-        }, 2000)
-      )
+    if (bDidMount) {
+      if (!props.show) {
+        setShouldMount(false)
+        setUnmountTimeout(
+          setTimeout(() => {
+            console.log('inside setTimeout', transformDuration)
+            console.log('bShouldUnmount', bShouldUnmount)
+            setShouldUnmount(props.show)
+            setWrapperClass(classes.Null)
+            // To prevent scrolling when the modal is open
+            if (!props.show && document.body.style.overflow === 'hidden') {
+              bodyScrollHandler(EHandlers.ENABLE)
+            }
+          }, transformDuration)
+        )
+      } else {
+        setShouldMount(props.show)
+        setWrapperClass(classes.Wrapper)
+        clearTimeout(UnmountTimeout)
+        // Only remove overflow null when dismounting modal
+        if (props.show && document.body.style.overflow !== 'hidden') {
+          bodyScrollHandler(EHandlers.DISABLE)
+        } 
+      }
     } else {
-      clearTimeout(UnmountTimeout)
+      setDidMount(true)
     }
   }, [props.show])
 
-  // Similar to componentDidUpdate. Watches for changes of prop.show
-  useEffect(() => {
-    // To prevent scrolling when the modal is open
-    if (props.show && document.body.style.overflow !== 'hidden') {
-      bodyScrollHandler(EHandlers.DISABLE)
-    // Only remove overflow null when dismounting modal
-    } else if (!props.show && document.body.style.overflow === 'hidden') {
-      bodyScrollHandler(EHandlers.ENABLE)
-    }
-  }, [props.show])
+  console.log(wrapperClass)
 
   const noCancel = props.alwaysShow
   return (
     // Similar to shouldComponentUpdate, useMemo will watch for changes in props.show and props.children.
     useMemo(() => {
       return (
-        <div className={props.show ? classes.BodyOverlay : classes.Null} >
-          <div onClick={props.closeModal} className={props.show ? classes.ModalWrapper : undefined} >
-            <div className={bShouldMount ? classes.ModalContainer : undefined} >
+        <div className={wrapperClass} >
+          <div onClick={props.closeModal} className={classes.Overlay} >
+            <div className={classes.Container} >
               <div
                 // Stopping propagation to stop the ModalWrapper closeModal execution from triggering upon
                 // interacting with the modal's children elements.
                 onClick={(e) => { e.stopPropagation() }}
                 style={{
-                  visibility: bShouldMount ? 'visible' : 'hidden',
+                  // visibility: bShouldMount ? 'visible' : 'hidden',
+                  transitionDuration: `${transformDuration}ms`,
                   transform: bShouldMount ? 'translateY(0)' : 'translateY(-100vh)',
                   opacity: bShouldMount ? 1 : 0,
                   maxWidth: props.maxWidth ? `${props.maxWidth}px` : undefined,
@@ -242,10 +248,10 @@ const modal = (props: IModalProps) => {
                     // Background styling, if passed as props.
                     : (props.background ? props.background : undefined)
                 }}
-                className={[classes.Modal, props.className || classes.ModalAesthetics].join(' ')}>
+                className={[classes.Modal, props.className || classes.Aesthetics].join(' ')}>
                 {noCancel ? null
                   : (
-                    <div className={classes.CloseButtonWrapper}>
+                    <div className={classes.Close}>
                       <button
                         type='button'
                         onClick={props.closeModal}
@@ -263,7 +269,7 @@ const modal = (props: IModalProps) => {
           </div>
         </div>
       )
-    }, [props.show, props.children, bShouldMount])
+    }, [props.show, props.children, bShouldMount, bShouldUnmount, wrapperClass])
   )
 }
 

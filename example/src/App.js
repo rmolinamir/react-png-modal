@@ -30,9 +30,9 @@ class App extends Component {
     return (
       <React.Fragment>
         <Modal
-          closeModal={this.closeModal}
-          show={showModal}>
-          <h1 style={{textAlign: 'center'}}>Hello world!</h1>
+          show={showModal}
+          closeModal={this.closeModal}>
+          <h1 style={{ textAlign: 'center' }}>Hello world!</h1>
         </Modal>
         <div className='App'>
           <button onClick={this.toggleModal}>Toggle Modal</button>
@@ -50,4 +50,4 @@ class App extends Component {
   }
 }
 
-export default App;
+export default App
