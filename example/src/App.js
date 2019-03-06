@@ -1,6 +1,6 @@
 import React, { Component } from 'react'
 // JSX
-import { Modal } from 'react-png-modal'
+import Modal from 'react-png-modal'
 
 class App extends Component {
   constructor(props) {

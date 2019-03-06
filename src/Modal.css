@@ -15,7 +15,6 @@
     bottom: 0px;
     left: 0px;
     overflow-y: auto;
-    user-select: none;
     animation: fade-in ease 100ms;
 }
 
@@ -25,31 +24,33 @@
     min-height: 100%;
     width: 100%; 
     background-color: rgba(0,0,0,.55);
-    user-select: none;
 }
 
 .ModalContainer {
     display: flex;
     justify-content: center;
     padding: 60px 12px;
-    user-select: none;
 }
 
 .Modal {
     position: relative;
     margin: auto;
     z-index: 500;
-    background-color: rgb(255, 255, 255);
     width: 100%;
     height: 100%;
-    border: 1px solid #ccc;
     border-radius: 5px;
     padding: 12px 6px;
     left: 0;
     top: 0%;
     box-sizing: border-box;
-    user-select: none;
     opacity: 0;
+    transition: transform ease;
+    transition-duration: 200ms;
+}
+
+.ModalAesthetics {
+  background-color: rgb(255, 255, 255);
+  border: 1px solid #ccc;
 }
 
 .CloseButtonWrapper {
