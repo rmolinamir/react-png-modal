@@ -1,101 +1,138 @@
 .Null {
-    display: none;
-    visibility: hidden;
-    position: absolute;
-    z-index: -1;
-    user-select: none;
+  display: none;
+  visibility: hidden;
+  position: absolute;
+  z-index: -1;
+  user-select: none;
 }
 
 .Wrapper {
-    display: block;
-    position: fixed;
-    z-index: 2000;
-    top: 0px;
-    right: 0px;
-    bottom: 0px;
-    left: 0px;
-    overflow-y: auto;
-    animation: fade-in ease 100ms;
+  display: block;
+  position: fixed;
+  z-index: 2000;
+  top: 0px;
+  right: 0px;
+  bottom: 0px;
+  left: 0px;
+  overflow-y: auto;
+  animation: fade-in ease 100ms;
 }
 
 .Overlay {
-    display: block;
-    height: auto;
-    min-height: 100%;
-    width: 100%; 
-    transition: background-color ease;
+  display: flex;
+  height: auto;
+  align-items: flex-start;
+  min-height: 100%;
+  width: 100%; 
+  transition: background-color ease;
 }
 
 .Container {
-    display: flex;
-    justify-content: center;
-    padding: 60px 12px;
+  display: flex;
+  width: 100%;
+  justify-content: center;
+  padding: 60px 12px;
 }
 
 .Modal {
-    position: relative;
-    margin: auto;
-    z-index: 500;
-    width: 100%;
-    height: 100%;
-    border-radius: 5px;
-    padding: 12px 6px;
-    left: 0;
-    top: 0%;
-    box-sizing: border-box;
-    opacity: 0;
-    transition: transform ease opacity ease;
+  margin: auto;
+  left: 0;
+  top: 0;
+  box-sizing: border-box;
+  transition: transform ease opacity ease;
 }
 
 .Aesthetics {
   background-color: rgb(255, 255, 255);
-  border: 1px solid #ccc;
+  position: relative;
+  width: 100%;
+  height: 100%;
+  padding: 12px 6px;
+  border-radius: 4px;
 }
 
 .Close {
-    margin-bottom: 16px;
+  margin-bottom: 16px;
 }
 
 .CancelButton {
-    padding: 0px;
-    margin: 0px;
-    display: flex;
-    align-items: center;
-    justify-content: center;
-    height: 25px;
-    width: 25px;
-    background: none;
-    color: inherit;
-    border: none;
-    padding: 0;
-    font: inherit;
-    cursor: pointer;
-    outline: inherit;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  float: right;
+  height: 25px;
+  width: 25px;
+  background: none;
+  color: inherit;
+  border: none;
+  padding: 0;
+  font: inherit;
+  cursor: pointer;
+  outline: inherit;
+  padding: 0px;
+  margin: 0px;
+}
+
+.Content {
+  display: block;
+  outline: none;
 }
 
 @media (min-width: 600px) {
-    .Modal {
-        height: auto;
-        top: 10%;
-        max-width: 500px;
-    }
+  .Modal {
+    height: auto;
+    top: 10%;
+    max-width: 500px;
+  }
 }
 
 @media (max-height: 600px) {
-    .Modal {
-        overflow: auto;
-        width: 100%;
-        height: 100%;
-        left: 0;
-        top: 0%;
-    }
+  .Modal {
+    overflow: auto;
+    width: 100%;
+    height: 100%;
+    left: 0;
+    top: 0%;
+  }
 }
 
 @keyframes fade-in {
-    0% {
-        opacity: 0;
-    }
-    100% {
-        opacity: 1;
-    }
+  0% {
+    opacity: 0;
+  }
+  100% {
+    opacity: 1;
+  }
+}
+
+.TranslateY_Open {
+  animation: translateY_Open ease forwards;
+}
+
+.TranslateY_Close {
+  animation: translateY_Close ease forwards;
+  /* opacity: 0;
+  transform: translateY(-15vh); */
+}
+
+@keyframes translateY_Open {
+  0% {
+    transform: translateY(-15vh);
+    opacity: 0;
+  }
+  100% {
+    transform: translateY(0);
+    opacity: 1;
+  }
+}
+
+@keyframes translateY_Close {
+  0% {
+    transform: translateY(0);
+    opacity: 1;
+  }
+  100% {
+    transform: translateY(-15vh);
+    opacity: 0;
+  }
 }

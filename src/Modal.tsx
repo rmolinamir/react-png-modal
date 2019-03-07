@@ -1,260 +1,166 @@
 import * as React from 'react'
-const { useState, useEffect, useMemo } = React
-// Worker function
-import { isMobile } from './is-mobile'
+// Worker functions
+import { modalWatcher, EModalHandlers } from './modalWatcher'
+import { idGenerator as setId } from './idGenerator'
 // CSS
 import classes from './Modal.css'
 // JSX
-import Cancel from './cancel'
+import Portal from './Portal'
+import Cancel from './Cancel'
+import FocusTrap from 'react-focus-trap'
 
-interface IModalProps {
+export interface IModalProps {
   closeModal: () => void
-  show: boolean
   className: string
-  children: React.ReactNode
-  maxWidth: number
-  // Reference to element to modify its paddingRight when the scrollbar disappears
+  children: React.ReactElement
+  /**
+   * Determines if the Modal should be shown or hidden, the Modal is always mounted by default.
+   */
+  open: boolean
+  /**
+   * Reference to element to modify its paddingRight when the scrollbar disappears.
+   */
   bodyRef: React.RefObject<HTMLBaseElement>
-  // shouldContentJump boolean that prevents contentJump function from executing if true.
+  /**
+   * `shouldContentJump` boolean that prevents the `contentJump` `modalWatcher` function from executing if true.
+   */
   shouldContentJump: boolean
-  // This property will prevent the cancel button from being rendered.
-  // I assume the modal won't receive closeModal functionalities from being passed.
-  // e.g. Commonly used for modals while uploading data to a backend, the modal dismounts when
-  // alwaysShow turns false.
+  /**
+   * This property will prevent the cancel button from being rendered.
+   * I assume the modal won't receive `closeModal` functionalities being passed down.
+   * e.g. Commonly used for modals while uploading data to a backend, the modal dismounts when
+   * `alwaysShow` turns false, removed from the DOM while outside.
+   */
   alwaysShow: boolean
-  // Removes border and background from the modal. The cancel button turns white.
+  /**
+   * Removes border and background from the modal. The cancel button turns white.
+   */
   transparent: boolean
-  // Modal background styling, transparent styling takes priority over background styling.
-  background: string
-  // Border background styling, transparent styling takes priority over border styling.
-  border: string
+  /**
+   * Centers the opened Modal.
+   */
+  center: boolean
+  /**
+   * Unmount animation duration.
+   */
+  animationDuration: number
 }
 
-enum EHandlers {
-  ENABLE,
-  DISABLE
+export interface IModalState {
+  pageYOffset: number
+  wrapperClassName: string
+  animationClassName: string
+  bShouldUnmount: boolean
 }
 
-// enum EModalStyles {
-//   SHOW = {
-//     visibility: bShouldMount ? 'visible' : 'hidden',
-//     transform: bShouldMount ? 'translateY(0)' : 'translateY(-100vh)',
-//     opacity: bShouldMount ? 1 : 0,
-//     maxWidth: props.maxWidth ? `${props.maxWidth}px` : undefined,
-//     // Transparent or background styling
-//     border: props.transparent ? 0
-//       : (props.border ? props.border : undefined),
-//     background: props.transparent ? 'none'
-//       // Background styling, if passed as props.
-//       : (props.background ? props.background : undefined)
-//   }
-//   HIDE = {
-//     visibility: 'hidden',
-//     transform: 'translateY(-100vh)',
-//     opacity: bShouldMount ? 1 : 0,
-//     maxWidth: props.maxWidth ? `${props.maxWidth}px` : undefined,
-//     // Transparent or background styling
-//     border: props.transparent ? 0
-//       : (props.border ? props.border : undefined),
-//     background: props.transparent ? 'none'
-//       // Background styling, if passed as props.
-//       : (props.background ? props.background : undefined)
-//   }
-// }
+export default class Modal extends React.PureComponent<IModalProps, IModalState> {
+  constructor(props: IModalProps) {
+    super(props)
+    document.body.style.overflow = null
+  }
 
-/**
- * Hook component
- */
-const modal = (props: IModalProps) => {
-  const [bIsMobile] = useState<boolean>(isMobile())
+  state = {
+    pageYOffset: 0,
+    wrapperClassName: this.props.open ? classes.Wrapper : classes.Null,
+    animationClassName: classes.TranslateY_Open,
+    bShouldUnmount: false
+  }
 
-  const [bDidMount, setDidMount] = useState<boolean>(props.alwaysShow)
-  const [bShouldMount, setShouldMount] = useState<boolean>(props.alwaysShow)
-  const [bShouldUnmount, setShouldUnmount] = useState<boolean>(false)
-  const [UnmountTimeout, setUnmountTimeout] = useState()
+  private myModalId: string = setId()
 
-  const [wrapperClass, setWrapperClass] = useState<string>(classes.Null)
-  const [pageYOffset, setPageYOffset] = useState<number>(0)
+  private UnmountTimeout: any = undefined
+  
+  private animationDuration = this.props.animationDuration || 200
 
-  const transformDuration = 500
+  componentDidMount () {
+    modalWatcher.setModal(this.myModalId, this)
+  }
 
-  const escFunction = (event: KeyboardEvent): void => {
-    if (event.keyCode === 27) {
-      // Close modal when esc is pressed
-      props.closeModal()
+  componentDidUpdate (prevProps: IModalProps) {
+    if (this.props.open && this.state.wrapperClassName === classes.Null) {
+      /**
+       * Prevent scrolling when the modal component is open.
+       */
+      modalWatcher.bodyScrollHandler(this.myModalId, EModalHandlers.DISABLE)
+      clearTimeout(this.UnmountTimeout)
+      /**
+       * Setting the mounting modal and animation CSS classes.
+       */
+      this.setState({
+        wrapperClassName: classes.Wrapper,
+        animationClassName: classes.TranslateY_Open
+      })
+    } else if ((prevProps.open !== this.props.open) && !this.props.open && this.state.wrapperClassName === classes.Wrapper) {
+      /**
+       * Setting the animation CSS class.
+       */
+      this.setState({
+        animationClassName: classes.TranslateY_Close
+      })
+      /**
+       * Timeout to let the animation play, then unmount modal, hide the modal, and release scroll lock.
+       */
+      this.UnmountTimeout = setTimeout(() => {
+        if (!this.props.open) {
+          modalWatcher.bodyScrollHandler(this.myModalId, EModalHandlers.ENABLE)
+        }
+        this.setState({
+          wrapperClassName: classes.Null,
+        })
+      }, this.animationDuration)
     }
   }
 
-  const mobileScrollHandler = (handler: EHandlers) => {
-    switch (handler) {
-      case EHandlers.ENABLE:
-        // Enabling mobile scrolling
-        document.body.style.position = null
-        document.body.style.top = null
-        document.body.style.width = null
-        window.scrollTo(0, pageYOffset)
-        break
-      case EHandlers.DISABLE:
-        const YOffset = window.pageYOffset
-        document.body.style.top = `-${YOffset}px`
-        document.body.style.position = 'fixed'
-        document.body.style.width = '100%'
-        setPageYOffset(YOffset)
-        break
-    }
+  /**
+   * When and if unmounted, remove the modal from the watcher list.
+   * The watcher will remove any leftover event listeners, etc.
+   * Also clearTimeout, if any.
+   */
+  componentWillUnmount() {
+    modalWatcher.removeModal(this.myModalId)
+    clearTimeout(this.UnmountTimeout)
   }
 
-  const contentJumpHandler = (handler: EHandlers, scrollBarWidth?: number) => {
-    switch (handler) {
-      case EHandlers.ENABLE:
-        // Remove scrollBarWidth to paddingRight property to the bodyRef prop if it exists, otherwise add it to
-        // a div with an id equal to 'root', otherwise add it to body.
-        if (props.bodyRef) {
-          if (props.bodyRef.current) {
-            props.bodyRef.current.style.paddingRight = null
-          }
-        } else if (document.getElementById('root')) {
-          const rootEl = document.getElementById('root')
-          if (rootEl) {
-            rootEl.style.paddingRight = null
-          }
-        } else {
-          document.body.style.paddingRight = null
-        }
-        break
-      case EHandlers.DISABLE:
-        // Add scrollBarWidth to paddingRight property to the bodyRef prop if it exists, otherwise add it to
-        // a div with an id equal to 'root', otherwise add it to body.
-        if (props.bodyRef) {
-          if (props.bodyRef.current) {
-            props.bodyRef.current.style.paddingRight = [scrollBarWidth, 'px'].join('')
-          }
-        } else if (document.getElementById('root')) {
-          const rootEl = document.getElementById('root')
-          if (rootEl) {
-            rootEl.style.paddingRight = [scrollBarWidth, 'px'].join('')
-          }
-        } else {
-          document.body.style.paddingRight = [scrollBarWidth, 'px'].join('')
-        }
-        break
-    }
-  }
-
-  const bodyScrollHandler = (handler: EHandlers) => {
-    switch (handler) {
-      case EHandlers.ENABLE:
-        // Remove overflow null to unlock body scroll
-        document.body.style.overflow = null
-        // Enabling mobile scrolling or removing ESC key event listener.
-        if (bIsMobile) {
-          mobileScrollHandler(handler)
-        } else {
-          document.removeEventListener('keydown', escFunction, false)
-          // Prevents content from jumping when the scroll bar disappears if shouldContentJump is false.
-          if (!props.shouldContentJump) {
-            contentJumpHandler(handler)
-          }
-        }
-        break
-      case EHandlers.DISABLE:
-        const documentWidth = document.documentElement.clientWidth
-        const windowWidth = window.innerWidth
-        const scrollBarWidth = windowWidth - documentWidth
-        // Add overflow hidden to lock body scroll
-        document.body.style.overflow = 'hidden'
-        // Disabling mobile scrolling or adding ESC key event listener.
-        if (bIsMobile) {
-          mobileScrollHandler(handler)
-        } else {
-          document.addEventListener('keydown', escFunction, false)
-          // Prevents content from jumping when the scroll bar disappears if shouldContentJump is false.
-          if (!props.shouldContentJump) {
-            contentJumpHandler(handler, scrollBarWidth)
-          }
-        }
-        break
-    }
-  }
-
-  // Similar to componentWillUnmount.
-  useEffect(() => {
-    /**
-     * returns in useEffect hooks are known as cleanups. They execute when
-     * the component will unmount or just before useEffect is executed AFTER
-     * the first time. This cleanup will remove the body scroll lock.
-     */
-    return () => {
-      bodyScrollHandler(EHandlers.ENABLE)
-      clearTimeout(UnmountTimeout)
-    }
-  }, [])
-
-  // Similar to componentDidUpdate. Watches for changes of prop.show
-  useEffect(() => {
-    if (bDidMount) {
-      if (!props.show) {
-        setShouldMount(false)
-        setUnmountTimeout(
-          setTimeout(() => {
-            console.log('inside setTimeout', transformDuration)
-            console.log('bShouldUnmount', bShouldUnmount)
-            setShouldUnmount(props.show)
-            setWrapperClass(classes.Null)
-            // To prevent scrolling when the modal is open
-            if (!props.show && document.body.style.overflow === 'hidden') {
-              bodyScrollHandler(EHandlers.ENABLE)
-            }
-          }, transformDuration)
-        )
-      } else {
-        setShouldMount(props.show)
-        setWrapperClass(classes.Wrapper)
-        clearTimeout(UnmountTimeout)
-        // Only remove overflow null when dismounting modal
-        if (props.show && document.body.style.overflow !== 'hidden') {
-          bodyScrollHandler(EHandlers.DISABLE)
-        } 
-      }
-    } else {
-      setDidMount(true)
-    }
-  }, [props.show])
-
-  console.log(wrapperClass)
-
-  const noCancel = props.alwaysShow
-  return (
-    // Similar to shouldComponentUpdate, useMemo will watch for changes in props.show and props.children.
-    useMemo(() => {
-      return (
-        <div className={wrapperClass} >
-          <div onClick={props.closeModal} className={classes.Overlay} >
+  render() {
+    const noCancel = this.props.alwaysShow
+    return (
+      <Portal>
+        <div className={this.state.wrapperClassName} >
+          <div 
+            onClick={this.props.closeModal} 
+            className={classes.Overlay}
+            style={{
+              backgroundColor: this.props.open ? 'rgba(0,0,0,.7)' : 'unset',
+              transitionDuration: `${this.animationDuration}ms`,
+              alignItems: this.props.center ? 'center' : undefined
+            }} >
             <div className={classes.Container} >
               <div
-                // Stopping propagation to stop the ModalWrapper closeModal execution from triggering upon
-                // interacting with the modal's children elements.
+                /**
+                 * Stopping propagation to stop the ModalWrapper closeModal execution from triggering upon
+                 * interacting with the modal's children elements.
+                 */
                 onClick={(e) => { e.stopPropagation() }}
                 style={{
-                  // visibility: bShouldMount ? 'visible' : 'hidden',
-                  transitionDuration: `${transformDuration}ms`,
-                  transform: bShouldMount ? 'translateY(0)' : 'translateY(-100vh)',
-                  opacity: bShouldMount ? 1 : 0,
-                  maxWidth: props.maxWidth ? `${props.maxWidth}px` : undefined,
-                  // Transparent or background styling
-                  border: props.transparent ? 0
-                    : (props.border ? props.border : undefined),
-                  background: props.transparent ? 'none'
-                    // Background styling, if passed as props.
-                    : (props.background ? props.background : undefined)
+                  transitionDuration: `${this.animationDuration}ms`,
+                  animationDuration: `${this.animationDuration}ms`,
+                  /**
+                   * Transparent  styling.
+                   */
+                  border: this.props.transparent ? 'none' : undefined,
+                  background: this.props.transparent ? 'none' : undefined
                 }}
-                className={[classes.Modal, props.className || classes.Aesthetics].join(' ')}>
+                className={[
+                  classes.Modal, 
+                  this.props.className || classes.Aesthetics, 
+                  this.state.animationClassName
+                  ].join(' ')}>
                 {noCancel ? null
                   : (
-                    <div className={classes.Close}>
+                    <div className={classes.CloseButtonWrapper}>
                       <button
                         type='button'
-                        onClick={props.closeModal}
+                        onClick={this.props.closeModal}
                         className={classes.CancelButton}
                         aria-busy='false' >
                         <Cancel />
@@ -262,15 +168,15 @@ const modal = (props: IModalProps) => {
                     </div>
                   )}
                 <section>
-                  {props.children}
+                  <FocusTrap className={classes.Content} active={this.props.open}>
+                      {this.props.children}
+                  </FocusTrap>
                 </section>
               </div>
             </div>
           </div>
         </div>
-      )
-    }, [props.show, props.children, bShouldMount, bShouldUnmount, wrapperClass])
-  )
+      </Portal>
+    )
+  }
 }
-
-export default modal
