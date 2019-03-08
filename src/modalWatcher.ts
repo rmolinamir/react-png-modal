@@ -1,4 +1,3 @@
-// import * as React from 'react'
 import { isMobile } from './isMobile'
 import Modal, { IModalProps} from './Modal'
 
@@ -73,9 +72,11 @@ class ModalWatcher {
   }
 
   /**
-   * Basically a worker function. Adds ID to the `openModals` array list, or removes them depending on the handler.
+   * Basically a worker function. Adds ID to the `openModals` array list, or removes them depending on the handler,
+   * and handles the `zIndex` by executing the `zIndexHandler` helper.
    */
-  public openModalsHandler (handler: EModalHandlers, id: string) {
+  public openModalsHandler (handler: EModalHandlers, id: string): void {
+    this.zIndexHandler(handler, id)
     switch (handler) {
       case EModalHandlers.ENABLE:
         this.openModals.pop()
@@ -83,6 +84,36 @@ class ModalWatcher {
       case EModalHandlers.DISABLE:
         this.openModals.push(id)
         break
+    }
+  }
+
+  /**
+   * Handles the `zIndex` modal CSS style properties depending on:
+   *  1. IF **there is more than 1 open modal** then:
+   *    1. If the modal is open, then it will add the `length` of the `openModals` array to the zIndex,
+   *    2. Otherwise, set the CSS style property as `null`.
+   *  2. If **there are no more than 1 open modals**, then do nothing and return void.
+   */
+  private zIndexHandler = (handler: EModalHandlers, id: string): void => {
+    if (this.openModals.length) {
+      const modal:React.RefObject<HTMLDivElement> = this.modalReferences[id].myModal
+      let zIndex: string | null
+      if (modal.current) {
+        zIndex = modal.current.style.zIndex || '2000'
+      } else {
+        zIndex = '2000'
+      }
+      switch (handler) {
+        case EModalHandlers.ENABLE:
+          zIndex = null
+          break
+        case EModalHandlers.DISABLE:
+          zIndex = (+zIndex + this.openModals.length).toString()
+          break
+      }
+      if (modal.current) {
+        modal.current.style.zIndex = zIndex
+      }
     }
   }
 
@@ -116,9 +147,11 @@ class ModalWatcher {
             this.mobileScrollHandler(handler)
           } else {
             document.removeEventListener('keydown', this.escFunction, false)
-            // Prevents content from jumping when the scroll bar disappears if shouldContentJump is false.
+            /**
+             * Prevents content from jumping when the scroll bar disappears if shouldContentJump is false.
+             */
             if (!modal.props.shouldContentJump) {
-              this.contentJumpHandler(handler, 0, modal.props.bodyRef)
+              this.contentJumpHandler(handler, modal.props.bodyRef)
             }
           }
         }
@@ -131,6 +164,9 @@ class ModalWatcher {
          * Being at 1 means the a modal just mounted.
          */
         if (this.openModals.length === 1) {
+          const documentWidth = document.documentElement.clientWidth
+          const windowWidth = window.innerWidth
+          const scrollBarWidth = windowWidth - documentWidth
           /**
            * The body scroll will be locked, here we:
            * 1. Calculate the width of the page scrollBar.
@@ -143,16 +179,13 @@ class ModalWatcher {
            *  5. Disable parasitic page jump when the modal opens, since the body scrollbar is hidden
            *     because of the overflow.
            */
-          const documentWidth = document.documentElement.clientWidth - 1
-          const windowWidth = window.innerWidth
-          const scrollBarWidth = windowWidth - documentWidth
           document.body.style.overflow = 'hidden'
           if (this.isMobile) {
             this.mobileScrollHandler(handler)
           } else {
             document.addEventListener('keydown', this.escFunction, false)
             if (!modal.props.shouldContentJump) {
-              this.contentJumpHandler(handler, scrollBarWidth, modal.props.bodyRef)
+              this.contentJumpHandler(handler, modal.props.bodyRef, scrollBarWidth)
             }
           }
         }
@@ -170,7 +203,9 @@ class ModalWatcher {
       const activeModalId = this.openModals[this.openModals.length - 1]
       const activeModal = this.modalReferences[activeModalId]
       if (activeModal.props) {
-        activeModal.props.closeModal()
+        if (activeModal.props.closeModal) {
+          activeModal.props.closeModal()
+        }
       }
     }
   }
@@ -196,7 +231,7 @@ class ModalWatcher {
     }
   }
 
-  private contentJumpHandler = (handler: EModalHandlers, scrollBarWidth?: number, bodyRef?: HTMLBaseElement) => {
+  private contentJumpHandler = (handler: EModalHandlers, bodyRef?: HTMLBaseElement, scrollBarWidth:number = 0) => {
     /**
      * Adds or removes the `scrollBarWidth` to the `paddingRight` CSS property 
      * from the `bodyRef` prop if it exists, otherwise remove it 

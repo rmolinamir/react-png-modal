@@ -8,7 +8,9 @@ class App extends Component {
 
     this.state = {
       bIsModalOpen: false,
-      bIsModal2Open: false
+      bIsModal2Open: false,
+      bIsModal3Open: true,
+      bIsModal4Open: false
     }
 
     this.openModal = () => {
@@ -23,6 +25,18 @@ class App extends Component {
       })
     }
 
+    this.openModal3 = () => {
+      this.setState({
+        bIsModal3Open: true
+      })
+    }
+
+    this.openModal4 = () => {
+      this.setState({
+        bIsModal4Open: true
+      })
+    }
+
     this.closeModal = () => {
       this.setState({
         bIsModalOpen: false
@@ -34,12 +48,25 @@ class App extends Component {
         bIsModal2Open: false
       })
     }
+
+    this.closeModal3 = () => {
+      this.setState({
+        bIsModal3Open: false
+      })
+    }
+
+    this.closeModal4 = () => {
+      this.setState({
+        bIsModal4Open: false
+      })
+    }
   }
 
   render () {
     return (
       <React.Fragment>
         <Modal
+          center
           open={this.state.bIsModalOpen}
           closeModal={this.closeModal}>
           <h1 style={{ textAlign: 'center' }}>Multiple Modals</h1>
@@ -49,6 +76,8 @@ class App extends Component {
           <input type='number' />
           <button onClick={this.openModal2}>Open Modal 2</button>
           <Modal
+            center
+            animationClassName='translatex'
             open={this.state.bIsModal2Open}
             closeModal={this.closeModal2}>
             <h2>Multiple Modals</h2>
@@ -68,6 +97,27 @@ class App extends Component {
           <hr />
           <button onClick={this.openModal}>Toggle Modal</button>
         </div>
+        {this.state.bIsModal3Open ? (
+          <Modal>
+            <h2>Always Show</h2>
+            <button onClick={this.closeModal3}>Close Always Show</button>
+          </Modal>
+        )
+          : null
+        }
+        <button onClick={this.openModal3}>Open Always Show</button>
+        {this.state.bIsModal4Open ? (
+          <Modal
+            closeModal={this.closeModal4}
+            open={this.state.bIsModal4Open}>
+            <h2>Modal4</h2>
+            <button onClick={this.closeModal4}>Close Always Show</button>
+          </Modal>
+        )
+          : null
+        }
+        <br />
+        <button onClick={this.openModal4}>Open 4</button>
       </React.Fragment>
     )
   }

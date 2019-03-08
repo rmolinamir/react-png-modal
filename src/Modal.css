@@ -105,14 +105,20 @@
   }
 }
 
+/**
+* ----------------------------
+* ---------ANIMATIONS---------
+* ----------------------------
+*/
+
+/* TranslateY */
+
 .TranslateY_Open {
   animation: translateY_Open ease forwards;
 }
 
 .TranslateY_Close {
   animation: translateY_Close ease forwards;
-  /* opacity: 0;
-  transform: translateY(-15vh); */
 }
 
 @keyframes translateY_Open {
@@ -134,5 +140,97 @@
   100% {
     transform: translateY(-15vh);
     opacity: 0;
+  }
+}
+
+/* TranslateX */
+
+.TranslateX_Open {
+  animation: translateX_Open ease forwards;
+}
+
+.TranslateX_Close {
+  animation: translateX_Close ease forwards;
+}
+
+@keyframes translateX_Open {
+  0% {
+    transform: translateX(-15vh);
+    opacity: 0;
+  }
+  100% {
+    transform: translateX(0);
+    opacity: 1;
+  }
+}
+
+@keyframes translateX_Close {
+  0% {
+    transform: translateX(0);
+    opacity: 1;
+  }
+  100% {
+    transform: translateX(15vh);
+    opacity: 0;
+  }
+}
+
+/* FadeIn */
+
+.FadeIn_Open {
+  animation: fadeIn_Open ease forwards;
+}
+
+.FadeIn_Close {
+  animation: fadeIn_Close ease forwards;
+}
+
+@keyframes fadeIn_Open {
+  0% {
+    opacity: 0;
+  }
+  100% {
+    opacity: 1;
+  }
+}
+
+@keyframes fadeIn_Close {
+  0% {
+    opacity: 1;
+  }
+  100% {
+    opacity: 0;
+  }
+}
+
+/* Zoom */
+
+.Zoom_Open {
+  animation: zoom_Open ease forwards;
+}
+
+.Zoom_Close {
+  animation: zoom_Close ease forwards;
+}
+
+@keyframes zoom_Open {
+  0% {
+    opacity: 0;
+    transform: scale(1.2)
+  }
+  100% {
+    opacity: 1;
+    transform: scale(1)
+  }
+}
+
+@keyframes zoom_Close {
+  0% {
+    opacity: 1;
+    transform: scale(1)
+  }
+  100% {
+    opacity: 0;
+    transform: scale(1.2)
   }
 }
