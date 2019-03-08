@@ -1,7 +1,7 @@
 {
   "name": "react-png-modal",
-  "version": "2.0.0",
-  "description": "",
+  "version": "2.0.1",
+  "description": "Renders a mode that disables the main window but keeps it visible, with a react.js component modal window as a child window in front of it capable of rendering any children passed to it.",
   "author": "rmolinamir",
   "license": "MIT",
   "repository": "rmolinamir/react-png-modal",
@@ -25,9 +25,8 @@
     "react-focus-lock": "^1.17.7"
   },
   "peerDependencies": {
-    "prop-types": "^15.5.4",
-    "react": "^16.8.0",
-    "react-dom": "^16.8.0"
+    "react": "^15.0.0 || ^16.0.0",
+    "react-dom": "^15.0.0 || ^16.0.0"
   },
   "devDependencies": {
     "@svgr/rollup": "^4.1.0",
@@ -66,5 +65,15 @@
   },
   "files": [
     "dist"
+  ],
+  "keywords": [
+    "react",
+    "png-ui",
+    "focus-lock",
+    "react-focus-lock",
+    "modal",
+    "responsive",
+    "library",
+    "component"
   ]
 }

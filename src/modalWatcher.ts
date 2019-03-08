@@ -231,13 +231,13 @@ class ModalWatcher {
     }
   }
 
-  private contentJumpHandler = (handler: EModalHandlers, bodyRef?: HTMLBaseElement, scrollBarWidth:number = 0) => {
+  private contentJumpHandler = (handler: EModalHandlers, bodyRef?: HTMLElement, scrollBarWidth:number = 0) => {
     /**
      * Adds or removes the `scrollBarWidth` to the `paddingRight` CSS property 
      * from the `bodyRef` prop if it exists, otherwise remove it 
      * from the `#root` div, else, remove the styles from the `body` tag.
      */
-    let ref: HTMLBaseElement | HTMLElement = document.body;
+    let ref: HTMLElement | HTMLElement = document.body;
     if (bodyRef) {
       ref = bodyRef
     } else if (document.getElementById('root')) {

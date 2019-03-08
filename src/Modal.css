@@ -47,11 +47,20 @@
   background-color: rgb(255, 255, 255);
   position: relative;
   max-width: 844px;
-  min-width: 320px;
   width: auto;
   height: 100%;
   padding: 18px;
   border-radius: 4px;
+}
+
+.Aesthetics * {
+  max-width: 100%;
+}
+
+@media (max-width: 744px) {
+  .Aesthetics {
+    max-width: 90%;
+  }
 }
 
 .Close {

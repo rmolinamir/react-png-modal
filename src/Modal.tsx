@@ -27,7 +27,7 @@ export interface IModalProps {
   /**
    * Reference to element to modify its paddingRight when the scrollbar disappears.
    */
-  bodyRef: React.RefObject<HTMLBaseElement>
+  bodyRef: HTMLElement
   /**
    * `shouldContentJump` boolean that prevents the `contentJump` `modalWatcher` function from executing if true.
    */
@@ -48,16 +48,19 @@ export interface IModalProps {
    */
   overlayColor: string
   /**
-   * Centers the opened Modal.
+   * Vertically centers the opened modal.
    */
   center: boolean
   /**
-   * Unmount animation duration.
+   * Mounting and unmount animation duration.
    */
   animationDuration: number
   /**
-   * `animationClassName` props will be used to decide which animations the modal will use during opening and closing.
-   * If a string is passed for custom animations, then it must be an object with the `open` and `close` key properties.
+   * The `animationClassName` prop will be used to decide which animations the modal will use during opening and closing.
+   * If a string is passed then it will use one of the available (`fadeIn`, `translateX`, `translateY`) ones or fallback
+   * to the default zoom-in and zoom-out, **otherwise** it a prop type `object` is passed, then it must contain the `open`
+   * and `close` keys with their respective values as the class animations, for info check out the `Different Animations Modals`
+   * example.
    */
   animationClassName: string | IAnimationClassNames
 }
@@ -201,7 +204,7 @@ export default class Modal extends React.PureComponent<IModalProps, IModalState>
   render() {
     const noCancel = this.props.alwaysOpen
     return (
-      <Portal>
+      <Portal domNode={this.props.bodyRef}>
         <div
           ref={this.myModal}
           className={this.state.wrapperClassName} >

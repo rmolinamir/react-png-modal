@@ -116,3 +116,13 @@
 .CustomModal2 h3 {
   color: #fff
 }
+
+.CustomModal *, .CustomModal2 * {
+  max-width: 100%;
+}
+
+@media (max-width: 744px) {
+  .CustomModal, .CustomModal2 {
+    max-width: 90%;
+  }
+}

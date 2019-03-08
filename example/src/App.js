@@ -65,6 +65,10 @@ const App = () => {
    * Should (Page) Content Jump modal.
    */
   const [bShouldContentJumpModal, setShouldContentJumpModal] = useState(false)
+  /**
+   * `bodyRef` modal.
+   */
+  const [bBodyRefModal, setBodyRefModal] = useState(false)
 
   const AlwaysOpenModalHandler = () => {
     setAlwaysOpenModal(true)
@@ -91,6 +95,7 @@ const App = () => {
         <li className={classes.Item}><a className={classes.Anchor} href='#custom-animation-duration-modal'>Custom Animation Duration modal</a></li>
         <li className={classes.Item}><a className={classes.Anchor} href='#always-open-modal'>"Always Open" modal</a></li>
         <li className={classes.Item}><a className={classes.Anchor} href='#should-content-jump-modal'>Should (Page) Content Jump modal</a></li>
+        <li className={classes.Item}><a className={classes.Anchor} href='#bodyref-modal'>`bodyRef` modal</a></li>
       </ul>
 
       <Example title='Default Modal' id='default-modal'>
@@ -249,7 +254,7 @@ const App = () => {
           open={bFocusLockedModal}>
           <h3>Focus-Locked Modal</h3>
           <p>
-            Try tabbing to cycle through the focusable elements or shift+tabbing to go backwards.
+            Try tabbing to cycle through the focusable elements or shift+tabbing to go backwards. This can't be disabled.
           </p>
           <form>
             <div>
@@ -409,7 +414,7 @@ const App = () => {
         <Modal
           center
           className={classes.CustomModal}
-          overlayColor='rgb(102, 205, 170, .7)'
+          overlayColor='rgba(102, 205, 170, .7)'
           closeModal={() => setOverlayModal(false)}
           open={bOverlayModal}>
           <h3>Custom Overlay Modal</h3>
@@ -421,7 +426,7 @@ const App = () => {
         <SyntaxHighlighter language='javascript' style={atomDark}>{`<Modal
   center
   className={classes.CustomModal}
-  overlayColor='rgb(102, 205, 170, .7)'
+  overlayColor='rgba(102, 205, 170, .7)'
   closeModal={() => setOverlayModal(false)}
   open={bOverlayModal}>
   <h3>Custom Overlay Modal</h3>
@@ -436,7 +441,7 @@ const App = () => {
         <Modal
           transparent
           center
-          overlayColor='rgb(102, 205, 170, .7)'
+          overlayColor='rgba(102, 205, 170, .7)'
           closeModal={() => setTransparentModal(false)}
           open={bTransparentModal}>
           <img
@@ -447,7 +452,7 @@ const App = () => {
         <SyntaxHighlighter language='javascript' style={atomDark}>{`<Modal
   transparent
   center
-  overlayColor='rgb(102, 205, 170, .7)'
+  overlayColor='rgba(102, 205, 170, .7)'
   closeModal={() => setTransparentModal(false)}
   open={bTransparentModal}>
   <img
@@ -461,7 +466,7 @@ const App = () => {
         <Modal
           center
           transparent
-          overlayColor='rgb(102, 205, 170, .7)'
+          overlayColor='rgba(102, 205, 170, .7)'
           closeModal={() => setCustomAnimationModal(false)}
           animationClassName={{
             open: classes.CustomAnimation_Open,
@@ -476,7 +481,7 @@ const App = () => {
         <SyntaxHighlighter language='javascript' style={atomDark}>{`<Modal
   center
   transparent
-  overlayColor='rgb(102, 205, 170, .7)'
+  overlayColor='rgba(102, 205, 170, .7)'
   closeModal={() => setCustomAnimationModal(false)}
   animationClassName={{
     open: classes.CustomAnimation_Open,
@@ -494,7 +499,7 @@ const App = () => {
         <Modal
           center
           transparent
-          overlayColor='rgb(102, 205, 170, .9)'
+          overlayColor='rgba(102, 205, 170, .9)'
           className={classes.CustomModal2}
           closeModal={() => setCustomAnimationDurationModal(false)}
           animationDuration={2000}
@@ -515,7 +520,7 @@ const App = () => {
         <SyntaxHighlighter language='javascript' style={atomDark}>{`<Modal
   center
   transparent
-  overlayColor='rgb(102, 205, 170, .9)'
+  overlayColor='rgba(102, 205, 170, .9)'
   className={classes.CustomModal2}
   closeModal={() => setCustomAnimationDurationModal(false)}
   animationDuration={2000}
@@ -542,7 +547,7 @@ const App = () => {
             center
             transparent
             animationDuration={0}
-            overlayColor='rgb(102, 205, 170, 1)'
+            overlayColor='rgba(102, 205, 170, 1)'
             open={bAlwaysOpenModal}>
             <h3>Don't worry, the modal will automatically dismount in 6 seconds.</h3>
             <img
@@ -559,7 +564,7 @@ const App = () => {
     center
     transparent
     animationDuration={0}
-    overlayColor='rgb(102, 205, 170, 1)'
+    overlayColor='rgba(102, 205, 170, 1)'
     open={bAlwaysOpenModal}>
     <h3>Don't worry, the modal will automatically dismount in 6 seconds.</h3>
     <img
@@ -579,6 +584,9 @@ const App = () => {
           open={bShouldContentJumpModal}>
           <h3>Should (Page) Content Jump modal</h3>
           <p>
+            <strong><em>shouldContentJump</em></strong> is automatically disabled on mobile, no scroll bar and all that... y'know.
+          </p>
+          <p>
             The <strong><em>shouldContentJump</em></strong> prop enables the parasitic jump, in case for some reason the programmer may want it.
           </p>
         </Modal>
@@ -591,6 +599,25 @@ const App = () => {
   <p>
     The <strong><em>shouldContentJump</em></strong> prop enables the parasitic jump, in case for some reason the programmer may want it.
   </p>
+</Modal>`}
+        </SyntaxHighlighter>
+      </Example>
+
+      <Example title='`bodyRef` Modal' id='bodyref-modal'>
+        <Modal
+          bodyRef={document.body}
+          closeModal={() => setBodyRefModal(false)}
+          open={bBodyRefModal}>
+          <h3>`bodyRef` modal</h3>
+          <p>
+            Open your dev-tools and check how the modal is inside the `<strong>body</strong>` HTML element instead of being inside the `<strong>#root</strong>` element unlike the other modals.
+          </p>
+        </Modal>
+        <Button onClick={() => setBodyRefModal(true)}>Open the modal</Button>
+        <SyntaxHighlighter language='javascript' style={atomDark}>{`<Modal
+  closeModal={() => setDefaultModal(false)}
+  open={bDefaultModal}>
+  <h3>Default modal</h3>
 </Modal>`}
         </SyntaxHighlighter>
       </Example>
