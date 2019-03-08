@@ -11,9 +11,15 @@ import Content from './Content'
 // import FocusTrap from 'react-focus-trap'
 
 export interface IModalProps {
-  closeModal: () => void
-  className: string
   children?: React.ReactElement | React.ReactNode
+  /**
+   * `closeModal` function that closes the modal.
+   */
+  closeModal: () => void
+  /**
+   * Custom CSS class for the modal content window.
+   */
+  className: string
   /**
    * Determines if the Modal should be shown or hidden, the Modal is always mounted by default.
    */
@@ -30,9 +36,9 @@ export interface IModalProps {
    * This property will prevent the cancel button from being rendered and automatically open the modal.
    * I assume the modal won't receive `closeModal` functionalities being passed down.
    * e.g. Commonly used for modals while uploading data to a backend, the modal dismounts when
-   * `alwaysShow` turns false, removed from the DOM from outside.
+   * `alwaysOpen` turns false, removed from the DOM from outside.
    */
-  alwaysShow: boolean
+  alwaysOpen: boolean
   /**
    * Removes border and background from the modal. The cancel button turns white.
    */
@@ -73,12 +79,16 @@ export default class Modal extends React.PureComponent<IModalProps, IModalState>
     super(props)
     const animationClassNames: IAnimationClassNames = this.animationClassHandler(props.animationClassName)
     this.animationClassNames = animationClassNames
-    this.animationDuration = this.props.animationDuration || 200
+    /**
+     * `animationDuration` will be 250 by default.
+     * If `animationDuration` is 0, then we have to check specifically for it.
+     */
+    this.animationDuration = this.props.animationDuration || (this.props.animationDuration === 0 ? 0 : 250)
     this.myModalId = setId()
     this.myModal = React.createRef()
     this.state = {
       pageYOffset: 0,
-      wrapperClassName: this.props.open || this.props.alwaysShow ? classes.Wrapper : classes.Null,
+      wrapperClassName: this.props.open || this.props.alwaysOpen ? classes.Wrapper : classes.Null,
       animationClassName: animationClassNames.open,
       bShouldUnmount: false
     }
@@ -95,7 +105,7 @@ export default class Modal extends React.PureComponent<IModalProps, IModalState>
     const defaultAnimations: IAnimationClassNames = { open: classes.Zoom_Open, close: classes.Zoom_Close }
     if (typeof className === 'string') {
       if (className) {
-        className.toLowerCase()
+        className = className.toLowerCase()
       }
       switch (className) {
         case 'translatey': return { open: classes.TranslateY_Open, close: classes.TranslateY_Close }
@@ -136,7 +146,7 @@ export default class Modal extends React.PureComponent<IModalProps, IModalState>
    */
   componentDidMount () {
     modalWatcher.setModal(this.myModalId, this)
-    if (this.props.open || this.props.alwaysShow) {
+    if (this.props.open || this.props.alwaysOpen) {
       modalWatcher.bodyScrollHandler(this.myModalId, EModalHandlers.DISABLE)
     }
   }
@@ -189,7 +199,7 @@ export default class Modal extends React.PureComponent<IModalProps, IModalState>
   }
 
   render() {
-    const noCancel = this.props.alwaysShow
+    const noCancel = this.props.alwaysOpen
     return (
       <Portal>
         <div
@@ -199,7 +209,7 @@ export default class Modal extends React.PureComponent<IModalProps, IModalState>
             onClick={this.props.closeModal} 
             className={classes.Overlay}
             style={{
-              backgroundColor: this.props.open || this.props.alwaysShow ? 
+              backgroundColor: this.props.open || this.props.alwaysOpen ? 
                 this.props.overlayColor || 'rgba(0,0,0,.7)'
                 : 'unset',
               transitionDuration: `${this.animationDuration}ms`,
