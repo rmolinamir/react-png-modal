@@ -12,6 +12,8 @@ npm install --save react-png-modal
 
 ## Showcase
 
+### [Examples hosted on CodeSandbox](https://31wj9p56qm.codesandbox.io/ "CodeSandbox Showcase")
+
 ### [Servify](https://www.servifyapp.com "Servify Website")
 
 ![Alt Text](https://media.giphy.com/media/5UMF6RMefKDFWMKJ3Y/giphy.gif)
@@ -22,39 +24,42 @@ npm install --save react-png-modal
 
 ## Instructions
 
-1. Declare and define a state with a boolean variable that will handle the Modal rendering inside a classful or functional 'hooked' component.
-2. Create close setter for said boolean, these setter will need to be passed down to the modal.
-3. Pass props as shown in the examples, that's it!
-4. The modal will close after:
-- Pressing the ESC key on desktop.
-- Clicking the X button on the modal window.
-- Clicking anywhere on the backdrop overlay.
+1. Declare and define a state with a `boolean` variable that will handle the Modal rendering inside a classful or functional 'hooked' component.
+2. Create an open & close setter functions for said boolean, the close setter will need to be passed down to the modal as `closeModal` and the boolean as `open`.
+3. The modal will close after:
+    - Pressing the ESC key on desktop.
+    - Clicking the X button on the modal window.
+    - Clicking anywhere on the backdrop overlay.
 
 ## Features
 
 1. ESC key event listener triggered for desktop users, pressing it will close the modal.
-2. You can place it anywhere on your DOM tree and have multiple modals (think of it like a HOC for whatever you pass as children).
-3. Can handle any type of children. It has a max-width of 500px, but it's a property that can be changed by passing a prop named `maxWidth` (see below for all the other available props).
-4. The modal's CSS may be changed without disrupting the functionality of the modal (**don't change the position: relative though or else it'll look bad because it will overflow the backdrop, if you need something absolutely positioned then do it through a child div element.**).
-5. Removes parasitic page content jump to the right after the modal is opened (this happens because the scrollbar may disappear). If you used create-react-app, chances are this feature will work correctly by default because it targets the div with an id equal to `root`. If there are none then it will target the body. **However, you can pass a `bodyRef` prop (type element) to target that reference instead** (e.g. if your "root" div's id is not equal to `root` but instead is equal to `app`, then you should pass the reference as `document.getElementById('app)`). **You can disable this feature by passing the prop `shouldContentJump`, more details about props down below.**.
+2. You can place it anywhere on your DOM tree and have multiple modals (think of it like a HOC for whatever you pass as children), the modals will be placed below your `#root` div or below your body if `#root` is not found by using react ***Portals***.
+3. Can handle any type of children.
+4. The modal window's CSS may be changed without disrupting the functionality of the modal by passing a CSS class.
+5. Removes parasitic page content jump to the right after the modal is opened (this happens because the scrollbar may disappear).
+6. Locks the body scrolling.
+7. Focus-locks (thanks to `react-focus-lock`) within the opened modal.
+      - **NOTE**:    If you used `create-react-app`, the modal will work correctly by default because it targets the div with an id equal to `root`. If there are none then it will target the body. **However, you can pass a `bodyRef` prop (type `HTMLElement`) to target that element instead** (e.g. if your "root" div's id is not equal to `root` but instead is equal to `app`, then you should pass the reference as `document.getElementById('app)` respectively). **You can disable this feature by passing the prop `shouldContentJump` if for some reason the programmer may wish for it, more details about props down below. This feature is also disabled on mobile, since mobile devices have no scroll bar, *Portals* will still work on mobile.**.
 
 ## Props
 
 Props               |       Functionality
 -------------       |       -------------
-`shouldContentJump` |       Pass this prop as **true** if you want content jumps when opening the modal (not recommended).
-`bodyRef`           |       A reference to an element for contentJump to work correctly (not always necessary, read Features point 5 for more details), make sure that's it's the element and not the whole React reference object.
-`closeModal`        |       Callback passed to the modal to close it, should change the 'show' prop's boolean value to false.
-`className`         |       You can use your own desired CSS class for the modal window by passing said class as a prop (you'll be able to change everything, such as background, border, etc.).
-`maxWidth`          |       Modal's max-width, defaults to 500px on devices with a screen width higher or equal than 600px (min-width: 600px).
-`transparent`       |       Removes the border and background from the modal. The cancel button turns white (the backdrop's background will always be (rgba(0,0,0,.55))).
-`alwaysShow`        |       This property will prevent the cancel button from being rendered. I assume the modal won't receive toggleModal nor closeModal functionalities from being passed. e.g. Commonly used for modals while uploading data to a backend, the modal dismounts when alwaysShow turns false.
-`background`        |       Background styling, transparent styling takes priority over background styling.
-`border`            |       Border styling, transparent styling takes priority over border styling.
+`open`              |       Reference to element to modify its paddingRight when the scrollbar disappears.
+`alwaysOpen`        |       This property will prevent the cancel button from being rendered and automatically open the modal. I assume the modal won't receive `closeModal` functionalities being passed down. e.g. Commonly used for modals while uploading data to a backend, the modal dismounts when `alwaysOpen` turns false, removed from the DOM from outside.
+`closeModal`        |       Callback passed to the modal to close it, should change the `open` type boolean prop value to false.
+`shouldContentJump` |       The shouldContentJump prop enables the parasitic jump, in case for some reason the programmer may want it. `shouldContentJump` is automatically disabled on mobile.
+`bodyRef`           |       A variable that stores an element for the `contentJump` and the react Portal (`ReactDOM.createPortal`) to work correctly (not always necessary, read Features point 5 for more details), make sure that's it's the element (type `HTMLElement`), not the React reference object.
+`center`            |       Vertically centers the opened modal.
+`className`         |       You can use your own CSS class for the modal window by passing said class as a prop (you'll be able to change everything, such as background, border, etc.).
+`animationClassName`|       The `animationClassName` prop will be used to decide which animations the modal will use during opening and closing. If a string is passed then it will use one of the available (`fadeIn`, `translateX`, `translateY`) ones or fallback to the default zoom-in and zoom-out, **otherwise** it a prop type `object` is passed, then it must contain the `open` and `close` keys with their respective values as the class animations, for info check out the `Different Animations Modals` example.
+`animationDuration` |       Mounting and unmount animation duration, must be in milliseconds. **Defaults to 250ms**.
+`overlayColor`      |       Overlay's `background-color` CSS style property.
 
-## Usage for React.js version ^16.8 (see below for previous versions)
+## Usage for React.js version ^15.0.0 || ^16.0.0
 
-[![Edit React Plug N' Go Modal](https://codesandbox.io/static/img/play-codesandbox.svg)](https://codesandbox.io/s/l4v861zk6z)
+[![Edit React Plug N' Go Modal](https://codesandbox.io/static/img/play-codesandbox.svg)](https://codesandbox.io/s/31wj9p56qm?fontsize=14)
 
 ```jsx
 import React, { Component } from 'react'
@@ -63,82 +68,31 @@ import Modal from 'react-png-modal'
 
 class Example extends Component {
   state = {
-    bIsModalHidden: true
+    bIsModalOpen: false
   }
 
-  toggleModal = () => {
-    this.setState((prevState) => {
-      return {
-        bIsModalHidden: !prevState.bIsModalHidden
-      }
+  openModal = () => {
+    this.setState({
+      bIsModalOpen: true
     })
   }
 
   closeModal = () => {
     this.setState({
-      bIsModalHidden: true
+      bIsModalOpen: false
     })
   }
 
   render () {
-    const showModal = !this.state.bIsModalHidden;
     return (
       <React.Fragment>
         <Modal
           closeModal={this.closeModal}
-          show={showModal}>
+          open={this.state.bIsModalOpen}>
           <h1>Hello world!</h1>
         </Modal>
         <div>
-          <button onClick={this.toggleModal}>Toggle Modal</button>
-        </div>
-      </React.Fragment>
-    )
-  }
-}
-```
-
-## Usage for React.js version ^15.0
-
-[![Edit React Plug N' Go Modal (React.js 16.6.0)](https://codesandbox.io/static/img/play-codesandbox.svg)](https://codesandbox.io/s/pplxlvvoqx)
-
-### (!) DON'T use the default export if you're not using React.js version 16.8.0 or more.
-
-```jsx
-import React, { Component } from 'react'
-
-import { Modal } from 'react-png-modal' // You can't use the default export if you're not using the latest React.js v^16.8.0
-
-class Example extends Component {
-  state = {
-    bIsModalHidden: true
-  }
-
-  toggleModal = () => {
-    this.setState((prevState) => {
-      return {
-        bIsModalHidden: !prevState.bIsModalHidden
-      }
-    })
-  }
-
-  closeModal = () => {
-    this.setState({
-      bIsModalHidden: true
-    })
-  }
-
-  render () {
-    const showModal = !this.state.bIsModalHidden;
-    return (
-      <React.Fragment>
-        <Modal
-          closeModal={this.closeModal}
-          show={showModal}>
-          <h1>Hello world!</h1>
-        </Modal>
-        <div>
-          <button onClick={this.toggleModal}>Toggle Modal</button>
+          <button onClick={this.openModal}>Toggle Modal</button>
         </div>
       </React.Fragment>
     )
@@ -148,36 +102,28 @@ class Example extends Component {
 
 ## Alternative that uses React Hooks
 
-[![Edit React Plug N' Go Modal (Functional 'Hooked' Component)](https://codesandbox.io/static/img/play-codesandbox.svg)](https://codesandbox.io/s/vn07y87z95)
-
 ```jsx
 import React, { useState } from 'react'
 
 import Modal from 'react-png-modal'
 
 const HookedModal = () => {
-  const [bIsModalHidden, setModalIsHidden] = useState(true)
-
-  const showModal = !bIsModalHidden
+  const [bIsModalOpen, setIsModalOpen] = useState(false)
 
   return (
     <>
       <Modal
-        closeModal={() => setModalIsHidden(true)}
-        show={showModal}>
+        closeModal={() => setIsModalOpen(false)}
+        open={bIsModalOpen}>
         <h1>This is the hooked modal alternative!</h1>
       </Modal>
       <div>
-        <button onClick={() => setModalIsHidden(!bIsModalHidden)}>Toggle Modal</button>
+        <button onClick={() => setIsModalOpen(true)}>Open Modal</button>
       </div>
     </>
   )
 }
 ```
-
-## Pending
-
-- Focus trapping within the modal is not yet implemented, but will be in the near future with the help of **focus-trap-react**. 
 
 ## License
 

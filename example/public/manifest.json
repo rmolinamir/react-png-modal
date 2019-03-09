@@ -1,6 +1,6 @@
 {
-  "short_name": "react-png-modal",
-  "name": "react-png-modal",
+  "short_name": "react-png-button",
+  "name": "react-png-button",
   "start_url": "./index.html",
   "display": "standalone",
   "theme_color": "#000000",

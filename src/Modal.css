@@ -1,101 +1,247 @@
 .Null {
-    display: none;
-    visibility: hidden;
-    position: absolute;
-    z-index: -1;
-    user-select: none;
+  display: none;
+  visibility: hidden;
+  position: absolute;
+  z-index: -1;
+  user-select: none;
 }
 
-.BodyOverlay {
-    display: block;
-    position: fixed;
-    z-index: 2000;
-    top: 0px;
-    right: 0px;
-    bottom: 0px;
-    left: 0px;
-    overflow-y: auto;
-    user-select: none;
-    animation: fade-in ease 100ms;
+.Wrapper {
+  display: block;
+  position: fixed;
+  z-index: 2000;
+  top: 0px;
+  right: 0px;
+  bottom: 0px;
+  left: 0px;
+  overflow-x: hidden;
+  overflow-y: auto;
+  animation: fade-in ease 100ms;
 }
 
-.ModalWrapper {
-    display: block;
-    height: auto;
-    min-height: 100%;
-    width: 100%; 
-    background-color: rgba(0,0,0,.55);
-    user-select: none;
+.Overlay {
+  display: flex;
+  height: auto;
+  align-items: flex-start;
+  min-height: 100%;
+  width: 100%; 
+  transition: background-color ease;
 }
 
-.ModalContainer {
-    display: flex;
-    justify-content: center;
-    padding: 60px 12px;
-    user-select: none;
+.Container {
+  display: flex;
+  width: 100%;
+  justify-content: center;
+  padding: 24px 0;
 }
 
 .Modal {
-    position: relative;
-    margin: auto;
-    z-index: 500;
-    background-color: rgb(255, 255, 255);
-    width: 100%;
-    height: 100%;
-    border: 1px solid #ccc;
-    border-radius: 5px;
-    padding: 12px 6px;
-    left: 0;
-    top: 0%;
-    box-sizing: border-box;
-    user-select: none;
-    opacity: 0;
+  margin: auto;
+  left: 0;
+  top: 0;
+  box-sizing: border-box;
+  transition: transform ease opacity ease;
 }
 
-.CloseButtonWrapper {
-    margin-bottom: 16px;
+.Aesthetics {
+  background-color: rgb(255, 255, 255);
+  position: relative;
+  max-width: 844px;
+  width: auto;
+  height: 100%;
+  padding: 18px;
+  border-radius: 4px;
+}
+
+.Aesthetics * {
+  max-width: 100%;
+}
+
+@media (max-width: 744px) {
+  .Aesthetics {
+    max-width: 90%;
+  }
+}
+
+.Close {
+  margin-bottom: 16px;
 }
 
 .CancelButton {
-    padding: 0px;
-    margin: 0px;
-    display: flex;
-    align-items: center;
-    justify-content: center;
-    height: 25px;
-    width: 25px;
-    background: none;
-    color: inherit;
-    border: none;
-    padding: 0;
-    font: inherit;
-    cursor: pointer;
-    outline: inherit;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  float: right;
+  height: 25px;
+  width: 25px;
+  background: none;
+  color: inherit;
+  border: none;
+  padding: 0;
+  font: inherit;
+  cursor: pointer;
+  outline: inherit;
+  padding: 0px;
+  margin: 0px;
+}
+
+.Content {
+  display: block;
+  outline: none;
 }
 
 @media (min-width: 600px) {
-    .Modal {
-        height: auto;
-        top: 10%;
-        max-width: 500px;
-    }
+  .Modal {
+    height: auto;
+    top: 10%;
+  }
 }
 
 @media (max-height: 600px) {
-    .Modal {
-        overflow: auto;
-        width: 100%;
-        height: 100%;
-        left: 0;
-        top: 0%;
-    }
+  .Modal {
+    overflow: auto;
+    width: 100%;
+    height: 100%;
+    left: 0;
+    top: 0%;
+  }
 }
 
 @keyframes fade-in {
-    0% {
-        opacity: 0;
-    }
-    100% {
-        opacity: 1;
-    }
+  0% {
+    opacity: 0;
+  }
+  100% {
+    opacity: 1;
+  }
+}
+
+/**
+* ----------------------------
+* ---------ANIMATIONS---------
+* ----------------------------
+*/
+
+/* TranslateY */
+
+.TranslateY_Open {
+  animation: translateY_Open ease forwards;
+}
+
+.TranslateY_Close {
+  animation: translateY_Close ease forwards;
+}
+
+@keyframes translateY_Open {
+  0% {
+    transform: translateY(-15vh);
+    opacity: 0;
+  }
+  100% {
+    transform: translateY(0);
+    opacity: 1;
+  }
+}
+
+@keyframes translateY_Close {
+  0% {
+    transform: translateY(0);
+    opacity: 1;
+  }
+  100% {
+    transform: translateY(-15vh);
+    opacity: 0;
+  }
+}
+
+/* TranslateX */
+
+.TranslateX_Open {
+  animation: translateX_Open ease forwards;
+}
+
+.TranslateX_Close {
+  animation: translateX_Close ease forwards;
+}
+
+@keyframes translateX_Open {
+  0% {
+    transform: translateX(-15vh);
+    opacity: 0;
+  }
+  100% {
+    transform: translateX(0);
+    opacity: 1;
+  }
+}
+
+@keyframes translateX_Close {
+  0% {
+    transform: translateX(0);
+    opacity: 1;
+  }
+  100% {
+    transform: translateX(15vh);
+    opacity: 0;
+  }
+}
+
+/* FadeIn */
+
+.FadeIn_Open {
+  animation: fadeIn_Open ease forwards;
+}
+
+.FadeIn_Close {
+  animation: fadeIn_Close ease forwards;
+}
+
+@keyframes fadeIn_Open {
+  0% {
+    opacity: 0;
+  }
+  100% {
+    opacity: 1;
+  }
+}
+
+@keyframes fadeIn_Close {
+  0% {
+    opacity: 1;
+  }
+  100% {
+    opacity: 0;
+  }
+}
+
+/* Zoom */
+
+.Zoom_Open {
+  animation: zoom_Open ease forwards;
+}
+
+.Zoom_Close {
+  animation: zoom_Close ease forwards;
+}
+
+@keyframes zoom_Open {
+  0% {
+    opacity: 0;
+    transform: scale(1.2)
+  }
+  100% {
+    opacity: 1;
+    transform: scale(1)
+  }
+}
+
+@keyframes zoom_Close {
+  0% {
+    opacity: 1;
+    transform: scale(1)
+  }
+  100% {
+    opacity: 0;
+    transform: scale(1.2)
+  }
 }
