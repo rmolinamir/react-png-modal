@@ -57,6 +57,29 @@ Props               |       Functionality
 `animationDuration` |       Mounting and unmount animation duration, must be in milliseconds. **Defaults to 250ms**.
 `overlayColor`      |       Overlay's `background-color` CSS style property.
 
+## CSS Variables
+
+The modal component by default comes with a default class named **`Aesthetics`** that affects the "window" of the modal. This defaut aesthetics CSS class is defined as:
+
+```css
+.Aesthetics {
+  background-color: var(--modal-background-color, rgb(255, 255, 255));
+  color: var(--modal-color, inherit);
+  position: relative;
+  max-width: 844px;
+  width: auto;
+  height: 100%;
+  padding: 18px;
+  border-radius: 4px;
+}
+```
+
+If you want to modify the window's color or background color you can simply set up those CSS variables in a parent element node, it will end up affecting every modal, you can set this up too by making use of the `bodyRef` prop. The same applies with the overlay color, its variable is:
+
+```css
+background-color: var(--modal-overlay-color, rgba(0,0,0,.7)
+```
+
 ## Usage for React.js version ^15.0.0 || ^16.0.0
 
 [![Edit React Plug N' Go Modal](https://codesandbox.io/static/img/play-codesandbox.svg)](https://codesandbox.io/s/31wj9p56qm?fontsize=14)

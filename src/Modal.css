@@ -22,19 +22,11 @@
 .Overlay {
   display: flex;
   height: auto;
+  background-color: var(--modal-overlay-color, rgba(0,0,0,.7));
   align-items: flex-start;
   min-height: 100%;
   width: 100%; 
   transition: background-color ease;
-}
-
-.Wrapper,
-.Overlay,
-.Container,
-.Modal,
-.Aesthetics,
-.Content {
-  color: inherit;
 }
 
 .Container {

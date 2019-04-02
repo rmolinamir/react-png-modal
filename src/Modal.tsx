@@ -212,9 +212,7 @@ export default class Modal extends React.PureComponent<IModalProps, IModalState>
             onClick={this.props.closeModal} 
             className={classes.Overlay}
             style={{
-              backgroundColor: this.props.open || this.props.alwaysOpen ? 
-                this.props.overlayColor || 'rgba(0,0,0,.7)'
-                : 'unset',
+              backgroundColor: (this.props.open || this.props.alwaysOpen) && this.props.overlayColor || undefined,
               transitionDuration: `${this.animationDuration}ms`,
               alignItems: this.props.center ? 'center' : undefined
             }} >

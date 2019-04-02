@@ -607,6 +607,7 @@ const App = () => {
         <Modal
           bodyRef={document.body}
           closeModal={() => setBodyRefModal(false)}
+          center
           open={bBodyRefModal}>
           <h3>`bodyRef` modal</h3>
           <p>
@@ -615,7 +616,9 @@ const App = () => {
         </Modal>
         <Button onClick={() => setBodyRefModal(true)}>Open the modal</Button>
         <SyntaxHighlighter language='javascript' style={atomDark}>{`<Modal
+  bodyRef={document.body}
   closeModal={() => setDefaultModal(false)}
+  center
   open={bDefaultModal}>
   <h3>Default modal</h3>
 </Modal>`}
