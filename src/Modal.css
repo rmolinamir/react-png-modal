@@ -28,6 +28,15 @@
   transition: background-color ease;
 }
 
+.Wrapper,
+.Overlay,
+.Container,
+.Modal,
+.Aesthetics,
+.Content {
+  color: inherit;
+}
+
 .Container {
   display: flex;
   width: 100%;
@@ -44,7 +53,7 @@
 }
 
 .Aesthetics {
-  background-color: rgb(255, 255, 255);
+  background-color: var(--modal-background-color, rgb(255, 255, 255));
   position: relative;
   max-width: 844px;
   width: auto;
