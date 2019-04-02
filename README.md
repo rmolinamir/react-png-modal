@@ -10,9 +10,7 @@
 npm install --save react-png-modal
 ```
 
-## Showcase
-
-### [Examples hosted on CodeSandbox](https://31wj9p56qm.codesandbox.io/ "CodeSandbox Showcase")
+## [Showcase](https://www.robertmolina.dev/codelab/react-png-modal)
 
 ### [Servify](https://www.servifyapp.com "Servify Website")
 
