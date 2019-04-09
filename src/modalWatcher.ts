@@ -66,8 +66,10 @@ class ModalWatcher {
   /**
    * Remove the modal ID on `ComponentWillUnmount` for every modal.
    */
-  public removeModal (id:string) {
-    this.bodyScrollHandler(id, EModalHandlers.ENABLE)
+  public removeModal (isOpen:boolean, id:string) {
+    if (isOpen) {
+      this.bodyScrollHandler(id, EModalHandlers.ENABLE)
+    }
     delete this.modalReferences[id]
   }
 

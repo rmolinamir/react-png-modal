@@ -197,7 +197,7 @@ export default class Modal extends React.PureComponent<IModalProps, IModalState>
    * Also clearTimeout, if any.
    */
   componentWillUnmount() {
-    modalWatcher.removeModal(this.myModalId)
+    modalWatcher.removeModal(this.props.open, this.myModalId)
     clearTimeout(this.UnmountTimeout)
   }
 
