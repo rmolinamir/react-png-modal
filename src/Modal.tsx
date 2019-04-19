@@ -8,7 +8,10 @@ import classes from './Modal.css'
 import Portal from './Portal'
 import Cancel from './Cancel'
 import Content from './Content'
-// import FocusTrap from 'react-focus-trap'
+import {
+  MaxWidthProperty,
+  BackgroundColorProperty
+} from 'csstype'
 
 export interface IModalProps {
   children?: React.ReactElement | React.ReactNode
@@ -20,6 +23,14 @@ export interface IModalProps {
    * Custom CSS class for the modal content window.
    */
   className: string
+  /**
+   * Modal's dialog window `background-color` inline CSS style property.
+   */
+  modalBackgroundColor: BackgroundColorProperty
+  /**
+   * Modal's dialog `max-width` inline CSS style property.
+   */
+  modalMaxWidth: MaxWidthProperty<string | number>
   /**
    * Determines if the Modal should be shown or hidden, the Modal is always mounted by default.
    */
@@ -46,7 +57,7 @@ export interface IModalProps {
   /**
    * Overlay's `background-color` CSS style property.
    */
-  overlayColor: string
+  overlayColor: BackgroundColorProperty
   /**
    * Vertically centers the opened modal.
    */
@@ -197,7 +208,7 @@ export default class Modal extends React.PureComponent<IModalProps, IModalState>
    * Also clearTimeout, if any.
    */
   componentWillUnmount() {
-    modalWatcher.removeModal(this.props.open, this.myModalId)
+    modalWatcher.removeModal(this.myModalId, this.props.open)
     clearTimeout(this.UnmountTimeout)
   }
 
@@ -232,7 +243,8 @@ export default class Modal extends React.PureComponent<IModalProps, IModalState>
                    * Transparent  styling.
                    */
                   border: this.props.transparent ? 'none' : undefined,
-                  background: this.props.transparent ? 'none' : undefined
+                  background: this.props.transparent ? 'none' : this.props.modalBackgroundColor,
+                  maxWidth: this.props.modalMaxWidth
                 }}
                 className={[
                   classes.Modal, 
@@ -245,7 +257,7 @@ export default class Modal extends React.PureComponent<IModalProps, IModalState>
                       <button
                         type='button'
                         onClick={this.props.closeModal}
-                        className={classes.CancelButton}
+                        className={classes.CloseButton}
                         aria-busy='false' >
                         <Cancel />
                       </button>

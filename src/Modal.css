@@ -47,10 +47,10 @@
   background-color: var(--modal-background-color, rgb(255, 255, 255));
   color: var(--modal-color, inherit);
   position: relative;
-  max-width: 844px;
+  max-width: 1024px;
   width: auto;
   height: 100%;
-  padding: 18px;
+  padding: 8px 16px 16px;
   border-radius: 4px;
 }
 
@@ -64,11 +64,17 @@
   }
 }
 
+.CloseButtonWrapper {
+  display: flex;
+  justify-content: flex-end;
+  padding-bottom: 8px;
+}
+
 .Close {
   margin-bottom: 16px;
 }
 
-.CancelButton {
+.CloseButton {
   display: flex;
   align-items: center;
   justify-content: center;

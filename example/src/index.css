@@ -6,5 +6,6 @@ body {
 
 h3 {
   text-transform: uppercase;
-  color: #484848
+  color: #484848;
+  margin: 0;
 }

@@ -108,7 +108,7 @@ const App = () => {
           </p>
         </Modal>
         <Button onClick={() => setDefaultModal(true)}>Open the modal</Button>
-        <SyntaxHighlighter language='javascript' style={atomDark}>{`<Modal
+        <SyntaxHighlighter language='jsx' style={atomDark}>{`<Modal
   closeModal={() => setDefaultModal(false)}
   open={bDefaultModal}>
   <h3>Default modal</h3>
@@ -138,7 +138,7 @@ const App = () => {
           </p>
         </Modal>
         <Button onClick={() => setBigModal(true)}>Open the modal</Button>
-        <SyntaxHighlighter language='javascript' style={atomDark}>{`<Modal
+        <SyntaxHighlighter language='jsx' style={atomDark}>{`<Modal
   closeModal={() => setBigModal(false)}
   open={bBigModal}>
   <h3>Big modal</h3>
@@ -172,7 +172,7 @@ const App = () => {
           </p>
         </Modal>
         <Button onClick={() => setCenteredModal(true)}>Open the modal</Button>
-        <SyntaxHighlighter language='javascript' style={atomDark}>{`<Modal
+        <SyntaxHighlighter language='jsx' style={atomDark}>{`<Modal
   center
   closeModal={() => setCenteredModal(false)}
   open={bCenteredModal}>
@@ -215,7 +215,7 @@ const App = () => {
           <Button onClick={() => setMultipleModal2(true)}>Open the modal</Button>
         </Modal>
         <Button onClick={() => setMultipleModal1(true)}>Open the first multiple modal</Button>
-        <SyntaxHighlighter language='javascript' style={atomDark}>{`<Modal
+        <SyntaxHighlighter language='jsx' style={atomDark}>{`<Modal
   center
   closeModal={() => setMultipleModal1(false)}
   open={bMultipleModal1}>
@@ -275,7 +275,7 @@ const App = () => {
           </form>
         </Modal>
         <Button onClick={() => setFocusLockedModal(true)}>Open the modal</Button>
-        <SyntaxHighlighter language='javascript' style={atomDark}>{`<Modal
+        <SyntaxHighlighter language='jsx' style={atomDark}>{`<Modal
   center
   closeModal={() => setFocusLockedModal(false)}
   open={bFocusLockedModal}>
@@ -320,7 +320,7 @@ const App = () => {
         <p>
           <Button button='danger' onClick={() => setCenteredModal(true)}><code className={classes.Code}>Default</code></Button>
         </p>
-        <SyntaxHighlighter language='javascript' style={atomDark}>{`<Modal
+        <SyntaxHighlighter language='jsx' style={atomDark}>{`<Modal
   center
   animationClassName={'TranslateY'}
   closeModal={() => setDifferentAnimationsModal1(false)}
@@ -397,7 +397,7 @@ const App = () => {
           </p>
         </Modal>
         <Button onClick={() => setCustomCSSModal(true)}>Open the modal</Button>
-        <SyntaxHighlighter language='javascript' style={atomDark}>{`<Modal
+        <SyntaxHighlighter language='jsx' style={atomDark}>{`<Modal
   center
   className={classes.CustomModal}
   closeModal={() => setCustomCSSModal(false)}
@@ -423,7 +423,7 @@ const App = () => {
           </p>
         </Modal>
         <Button onClick={() => setOverlayModal(true)}>Open the modal</Button>
-        <SyntaxHighlighter language='javascript' style={atomDark}>{`<Modal
+        <SyntaxHighlighter language='jsx' style={atomDark}>{`<Modal
   center
   className={classes.CustomModal}
   overlayColor='rgba(102, 205, 170, .7)'
@@ -449,7 +449,7 @@ const App = () => {
             src={'https://media3.giphy.com/media/MDJ9IbxxvDUQM/giphy.gif?cid=3640f6095c820e41375938416f1ea2c3'} />
         </Modal>
         <Button onClick={() => setTransparentModal(true)}>Open the modal</Button>
-        <SyntaxHighlighter language='javascript' style={atomDark}>{`<Modal
+        <SyntaxHighlighter language='jsx' style={atomDark}>{`<Modal
   transparent
   center
   overlayColor='rgba(102, 205, 170, .7)'
@@ -478,7 +478,7 @@ const App = () => {
             src={'https://media3.giphy.com/media/MDJ9IbxxvDUQM/giphy.gif?cid=3640f6095c820e41375938416f1ea2c3'} />
         </Modal>
         <Button onClick={() => setCustomAnimationModal(true)}>Open the modal</Button>
-        <SyntaxHighlighter language='javascript' style={atomDark}>{`<Modal
+        <SyntaxHighlighter language='jsx' style={atomDark}>{`<Modal
   center
   transparent
   overlayColor='rgba(102, 205, 170, .7)'
@@ -517,7 +517,7 @@ const App = () => {
             src={'https://media3.giphy.com/media/MDJ9IbxxvDUQM/giphy.gif?cid=3640f6095c820e41375938416f1ea2c3'} />
         </Modal>
         <Button onClick={() => setCustomAnimationDurationModal(true)}>Open the modal</Button>
-        <SyntaxHighlighter language='javascript' style={atomDark}>{`<Modal
+        <SyntaxHighlighter language='jsx' style={atomDark}>{`<Modal
   center
   transparent
   overlayColor='rgba(102, 205, 170, .9)'
@@ -558,7 +558,7 @@ const App = () => {
         )
           : null}
         <Button onClick={AlwaysOpenModalHandler}>Open the modal</Button>
-        <SyntaxHighlighter language='javascript' style={atomDark}>{`{bAlwaysOpenModal ? (
+        <SyntaxHighlighter language='jsx' style={atomDark}>{`{bAlwaysOpenModal ? (
   <Modal
     alwaysOpen
     center
@@ -591,7 +591,7 @@ const App = () => {
           </p>
         </Modal>
         <Button onClick={() => setShouldContentJumpModal(true)}>Open the modal</Button>
-        <SyntaxHighlighter language='javascript' style={atomDark}>{`<Modal
+        <SyntaxHighlighter language='jsx' style={atomDark}>{`<Modal
   shouldContentJump
   closeModal={() => setShouldContentJumpModal(false)}
   open={bShouldContentJumpModal}>
@@ -615,7 +615,7 @@ const App = () => {
           </p>
         </Modal>
         <Button onClick={() => setBodyRefModal(true)}>Open the modal</Button>
-        <SyntaxHighlighter language='javascript' style={atomDark}>{`<Modal
+        <SyntaxHighlighter language='jsx' style={atomDark}>{`<Modal
   bodyRef={document.body}
   closeModal={() => setDefaultModal(false)}
   center

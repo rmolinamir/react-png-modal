@@ -66,7 +66,7 @@ class ModalWatcher {
   /**
    * Remove the modal ID on `ComponentWillUnmount` for every modal.
    */
-  public removeModal (isOpen:boolean, id:string) {
+  public removeModal (id:string, isOpen:boolean) {
     if (isOpen) {
       this.bodyScrollHandler(id, EModalHandlers.ENABLE)
     }
