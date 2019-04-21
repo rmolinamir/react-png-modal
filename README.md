@@ -50,6 +50,8 @@ Props               |       Functionality
 `animationClassName`|       The `animationClassName` prop will be used to decide which animations the modal will use during opening and closing. If a string is passed then it will use one of the available (`fadeIn`, `translateX`, `translateY`) ones or fallback to the default zoom-in and zoom-out, **otherwise** it a prop type `object` is passed, then it must contain the `open` and `close` keys with their respective values as the class animations, for info check out the `Different Animations Modals` example.
 `animationDuration` |       Mounting and unmount animation duration, must be in milliseconds. **Defaults to 250ms**.
 `overlayColor`      |       Overlay's `background-color` CSS style property.
+`modalBackgroundColor`      |       Modal's dialog window  `background-color` CSS style property.
+`modalMaxWidth`      |       Modal's dialog window  `max-width` CSS style property.
 
 ## CSS Variables
 
@@ -60,10 +62,10 @@ The modal component by default comes with a default class named **`Aesthetics`**
   background-color: var(--modal-background-color, rgb(255, 255, 255));
   color: var(--modal-color, inherit);
   position: relative;
-  max-width: 844px;
+  max-width: 1024px;
   width: auto;
   height: 100%;
-  padding: 18px;
+  padding: 8px 16px 16px;
   border-radius: 4px;
 }
 ```
