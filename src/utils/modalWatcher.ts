@@ -1,9 +1,9 @@
 import { isMobile } from './isMobile'
-import Modal, { IModalProps} from './Modal'
+import Modal, { IModalProps} from '../components/Modal';
 
 export enum EModalHandlers {
   ENABLE,
-  DISABLE
+  DISABLE,
 }
 
 interface IModalReferences {
@@ -19,7 +19,7 @@ class ModalWatcher {
   /**
    * Object storing all of the modal component references (access to state and props).
    */
-  private modalReferences:IModalReferences = {}
+  private modalReferences: IModalReferences = {}
 
   /**
    * Array that holds the ID of every opened modal. Also used to determine all active modals.
@@ -34,7 +34,7 @@ class ModalWatcher {
   /**
    * Determines if the user is on a mobile device.
    */
-  private isMobile = isMobile()
+  private isMobile = isMobile();
 
   /**
    * Read only property that can not be modified nor accessed outside of the class.
@@ -59,7 +59,7 @@ class ModalWatcher {
    */
   public setModal (id:string, modalRef?: Modal) {
     if (modalRef) {
-      this.modalReferences[id] = modalRef
+      this.modalReferences[id] = modalRef;
     }
   }
 
@@ -68,24 +68,24 @@ class ModalWatcher {
    */
   public removeModal (id:string, isOpen:boolean) {
     if (isOpen) {
-      this.bodyScrollHandler(id, EModalHandlers.ENABLE)
+      this.bodyScrollHandler(id, EModalHandlers.ENABLE);
     }
-    delete this.modalReferences[id]
+    delete this.modalReferences[id];
   }
 
   /**
-   * Basically a worker function. Adds ID to the `openModals` array list, or removes them depending on the handler,
+   * Adds ID to the `openModals` array list, or removes them depending on the handler,
    * and handles the `zIndex` by executing the `zIndexHandler` helper.
    */
   public openModalsHandler (handler: EModalHandlers, id: string): void {
-    this.zIndexHandler(handler, id)
+    this.zIndexHandler(handler, id);
     switch (handler) {
       case EModalHandlers.ENABLE:
-        this.openModals.pop()
-        break
+        this.openModals.pop();
+        break;
       case EModalHandlers.DISABLE:
-        this.openModals.push(id)
-        break
+        this.openModals.push(id);
+        break;
     }
   }
 
@@ -98,23 +98,23 @@ class ModalWatcher {
    */
   private zIndexHandler = (handler: EModalHandlers, id: string): void => {
     if (this.openModals.length) {
-      const modal:React.RefObject<HTMLDivElement> = this.modalReferences[id].myModal
-      let zIndex: string | null
+      const modal: React.RefObject<HTMLDivElement> = this.modalReferences[id].myModal;
+      let zIndex: string | null;
       if (modal.current) {
-        zIndex = modal.current.style.zIndex || '2000'
+        zIndex = modal.current.style.zIndex || '2000';
       } else {
-        zIndex = '2000'
+        zIndex = '2000';
       }
       switch (handler) {
         case EModalHandlers.ENABLE:
-          zIndex = null
-          break
+          zIndex = null;
+          break;
         case EModalHandlers.DISABLE:
-          zIndex = (+zIndex + this.openModals.length).toString()
-          break
+          zIndex = (+zIndex + this.openModals.length).toString();
+          break;
       }
       if (modal.current) {
-        modal.current.style.zIndex = zIndex
+        modal.current.style.zIndex = zIndex ?? '';
       }
     }
   }
@@ -136,7 +136,7 @@ class ModalWatcher {
         if (this.openModals.length === 0) {
           /**
            * The body scroll will be unlocked, here we:
-           * 1. Set the document.body overflow as `null`.
+           * 1. Set the document.body overflow as empty string.
            * If on mobile:
            *  2. Disable the scroll lock that works on mobile devices.
            * Else:
@@ -144,31 +144,31 @@ class ModalWatcher {
            *  4. Disable the scroll lock for desktop devices.
            *  5. Restore the body styling back to normal due to the `contentJumpHandler` added CSS.
            */
-          document.body.style.overflow = null
+          document.body.style.overflow = '';
           if (this.isMobile) {
-            this.mobileScrollHandler(handler)
+            this.mobileScrollHandler(handler);
           } else {
-            document.removeEventListener('keydown', this.escFunction, false)
+            document.removeEventListener('keydown', this.escFunction, false);
             /**
              * Prevents content from jumping when the scroll bar disappears if shouldContentJump is false.
              */
             if (!modal.props.shouldContentJump) {
-              this.contentJumpHandler(handler, modal.props.bodyRef)
+              this.contentJumpHandler(handler, modal.props.bodyRef);
             }
           }
         }
         break
       case EModalHandlers.DISABLE:
-        this.openModalsHandler(handler, id)
+        this.openModalsHandler(handler, id);
         /**
          * The body will only be locked ONLY when the `openModals` array's length is equal to 1,
          * meaning that **it will only run when the first Modal is mounted**.
          * Being at 1 means the a modal just mounted.
          */
         if (this.openModals.length === 1) {
-          const documentWidth = document.documentElement.clientWidth
-          const windowWidth = window.innerWidth
-          const scrollBarWidth = windowWidth - documentWidth
+          const documentWidth = document.documentElement.clientWidth;
+          const windowWidth = window.innerWidth;
+          const scrollBarWidth = windowWidth - documentWidth;
           /**
            * The body scroll will be locked, here we:
            * 1. Calculate the width of the page scrollBar.
@@ -181,17 +181,17 @@ class ModalWatcher {
            *  5. Disable parasitic page jump when the modal opens, since the body scrollbar is hidden
            *     because of the overflow.
            */
-          document.body.style.overflow = 'hidden'
+          document.body.style.overflow = 'hidden';
           if (this.isMobile) {
-            this.mobileScrollHandler(handler)
+            this.mobileScrollHandler(handler);
           } else {
-            document.addEventListener('keydown', this.escFunction, false)
+            document.addEventListener('keydown', this.escFunction, false);
             if (!modal.props.shouldContentJump) {
-              this.contentJumpHandler(handler, modal.props.bodyRef, scrollBarWidth)
+              this.contentJumpHandler(handler, modal.props.bodyRef, scrollBarWidth);
             }
           }
         }
-        break
+        break;
     }
   }
 
@@ -202,12 +202,10 @@ class ModalWatcher {
    */
   private escFunction = (event: KeyboardEvent) => {
     if (event.keyCode === 27) {
-      const activeModalId = this.openModals[this.openModals.length - 1]
-      const activeModal = this.modalReferences[activeModalId]
-      if (activeModal.props) {
-        if (activeModal.props.closeModal) {
-          activeModal.props.closeModal()
-        }
+      const activeModalId = this.openModals[this.openModals.length - 1];
+      const activeModal: IModalReferences = this.modalReferences[activeModalId];
+      if (activeModal.props && activeModal.props.closeModal) {
+        activeModal.props.closeModal();
       }
     }
   }
@@ -218,18 +216,18 @@ class ModalWatcher {
   private mobileScrollHandler = (handler: EModalHandlers) => {
     switch (handler) {
       case EModalHandlers.ENABLE:
-        document.body.style.position = null
-        document.body.style.top = null
-        document.body.style.width = null
-        window.scrollTo(0, this.pageYOffset)
-        break
+        document.body.style.position = '';
+        document.body.style.top = '';
+        document.body.style.width = '';
+        window.scrollTo(0, this.pageYOffset);
+        break;
       case EModalHandlers.DISABLE:
-        const pageYOffset = window.pageYOffset
-        document.body.style.top = `-${pageYOffset}px`
-        document.body.style.position = 'fixed'
-        document.body.style.width = '100%'
-        this.pageYOffset = pageYOffset
-        break
+        const pageYOffset = window.pageYOffset;
+        document.body.style.top = `-${pageYOffset}px`;
+        document.body.style.position = 'fixed';
+        document.body.style.width = '100%';
+        this.pageYOffset = pageYOffset;
+        break;
     }
   }
 
@@ -241,20 +239,20 @@ class ModalWatcher {
      */
     let ref: HTMLElement | HTMLElement = document.body;
     if (bodyRef) {
-      ref = bodyRef
+      ref = bodyRef;
     } else if (document.getElementById('root')) {
-      const rootEl = document.getElementById('root')
+      const rootEl = document.getElementById('root');
       if (rootEl) {
-        ref = rootEl
+        ref = rootEl;
       }
     }
     switch (handler) {
       case EModalHandlers.ENABLE:
-        ref.style.paddingRight = null
-        break
+        ref.style.paddingRight = '';
+        break;
       case EModalHandlers.DISABLE:
-        ref.style.paddingRight = `${scrollBarWidth}px`
-        break
+        ref.style.paddingRight = `${scrollBarWidth}px`;
+        break;
     }
   }
 

@@ -1,17 +1,24 @@
-import * as React from 'react'
-// Worker functions
-import { modalWatcher, EModalHandlers } from './modalWatcher'
-import { idGenerator as setId } from './idGenerator'
-// CSS
-import classes from './Modal.css'
-// JSX
-import Portal from './Portal'
-import Cancel from './Cancel'
-import Content from './Content'
+// Libraries
+import React from 'react';
+
+// Types
 import {
   MaxWidthProperty,
-  BackgroundColorProperty
-} from 'csstype'
+  BackgroundColorProperty,
+} from 'csstype';
+
+// CSS
+import classes from '../react-png-modal.css';
+
+// Dependencies
+import Portal from './Portal';
+import Cancel from './Cancel';
+import Content from './Content';
+
+// Utilities
+import { modalWatcher, EModalHandlers } from '../utils/modalWatcher';
+import { idGenerator } from '../utils/idGenerator';
+import { stopPropagation } from '../utils/stopPropagation';
 
 export interface IModalProps {
   children?: React.ReactElement | React.ReactNode
@@ -76,9 +83,14 @@ export interface IModalProps {
   animationClassName: string | IAnimationClassNames
 }
 
+enum EWrapperState {
+  OPEN,
+  CLOSED,
+}
+
 export interface IModalState {
   pageYOffset: number
-  wrapperClassName: string
+  wrapperState: EWrapperState
   animationClassName: string
   bShouldUnmount: boolean
 }
@@ -91,21 +103,18 @@ interface IAnimationClassNames {
 export default class Modal extends React.PureComponent<IModalProps, IModalState> {
   constructor(props: IModalProps) {
     super(props)
-    const animationClassNames: IAnimationClassNames = this.animationClassHandler(props.animationClassName)
-    this.animationClassNames = animationClassNames
-    /**
-     * `animationDuration` will be 250 by default.
-     * If `animationDuration` is 0, then we have to check specifically for it.
-     */
-    this.animationDuration = this.props.animationDuration || (this.props.animationDuration === 0 ? 0 : 250)
-    this.myModalId = setId()
-    this.myModal = React.createRef()
+    const animationClassNames: IAnimationClassNames = this.animationClassHandler(props.animationClassName);
+    this.animationClassNames = animationClassNames;
+    // The `animationDuration` prop will be 250 by default.
+    this.animationDuration = this.props.animationDuration || (this.props.animationDuration ?? 250);
+    this.myModalId = idGenerator();
+    this.myModal = React.createRef();
     this.state = {
       pageYOffset: 0,
-      wrapperClassName: this.props.open || this.props.alwaysOpen ? classes.Wrapper : classes.Null,
+      wrapperState: this.props.open || this.props.alwaysOpen ? EWrapperState.OPEN : EWrapperState.CLOSED,
       animationClassName: animationClassNames.open,
       bShouldUnmount: false
-    }
+    };
   }
 
   /**
@@ -113,33 +122,25 @@ export default class Modal extends React.PureComponent<IModalProps, IModalState>
    * that contains the animations executed when the modal opens and closes.
    */
   private animationClassHandler = (className?: string | IAnimationClassNames): IAnimationClassNames => {
-    /**
-     * If `className` is of type `string`, meaning, the user wants a specific animation:
-     */
+    // If `className` is of type `string`, meaning, the user wants a specific animation:
     const defaultAnimations: IAnimationClassNames = { open: classes.Zoom_Open, close: classes.Zoom_Close }
     if (typeof className === 'string') {
-      if (className) {
-        className = className.toLowerCase()
-      }
+      className = className.toLowerCase();
       switch (className) {
-        case 'translatey': return { open: classes.TranslateY_Open, close: classes.TranslateY_Close }
-        case 'translatex': return { open: classes.TranslateX_Open, close: classes.TranslateX_Close }
-        case 'fadein': return { open: classes.FadeIn_Open, close: classes.FadeIn_Close }
+        case 'translatey': return { open: classes.TranslateY_Open, close: classes.TranslateY_Close };
+        case 'translatex': return { open: classes.TranslateX_Open, close: classes.TranslateX_Close };
+        case 'fadein': return { open: classes.FadeIn_Open, close: classes.FadeIn_Close };
         default:
-          console.warn('No animation classes match your query. Defaulted to: ', defaultAnimations)
-          return defaultAnimations
+          console.warn('REACT-PNG-MODAL: No animation classes match your query. Defaulted to: ', defaultAnimations);
+          return defaultAnimations;
       }
-    /**
-     * If `className` is of type `IAnimationClassNames`.
-     */
+    // If `className` is of type `IAnimationClassNames`.
     } else {
       if (className) {
-        return { ...className }
+        return { ...className };
       } else {
-        /**
-         * Default case.
-         */
-        return defaultAnimations
+        // Default case.
+        return defaultAnimations;
       }
     }
   }
@@ -159,46 +160,43 @@ export default class Modal extends React.PureComponent<IModalProps, IModalState>
    * to disable the scroll on `componentDidMount`.
    */
   componentDidMount () {
-    modalWatcher.setModal(this.myModalId, this)
+    modalWatcher.setModal(this.myModalId, this);
     if (this.props.open || this.props.alwaysOpen) {
-      modalWatcher.bodyScrollHandler(this.myModalId, EModalHandlers.DISABLE)
+      modalWatcher.bodyScrollHandler(this.myModalId, EModalHandlers.DISABLE);
     }
   }
 
   componentDidUpdate (prevProps: IModalProps) {
-    if (this.props.open && this.state.wrapperClassName === classes.Null) {
-      /**
-       * Prevent scrolling when the modal component is open.
-       */
-      modalWatcher.bodyScrollHandler(this.myModalId, EModalHandlers.DISABLE)
-      clearTimeout(this.UnmountTimeout)
-      /**
-       * Setting the mounting modal and animation CSS classes.
-       */
-      const animationClassName_Open = this.animationClassNames.open
+    if (
+      this.props.open &&
+      this.state.wrapperState === EWrapperState.CLOSED
+    ) {
+      // Prevent scrolling when the modal component is open.
+      modalWatcher.bodyScrollHandler(this.myModalId, EModalHandlers.DISABLE);
+      clearTimeout(this.UnmountTimeout);
+      // Setting the mounting modal and animation CSS classes.
+      const animationClassName_Open = this.animationClassNames.open;
       this.setState({
-        wrapperClassName: classes.Wrapper,
+        wrapperState: EWrapperState.OPEN,
         animationClassName: animationClassName_Open
-      })
-    } else if ((prevProps.open !== this.props.open) && !this.props.open && this.state.wrapperClassName === classes.Wrapper) {
-      /**
-       * Setting the animation CSS class.
-       */
+      });
+    } else if (
+      (prevProps.open !== this.props.open) &&
+      !this.props.open &&
+      this.state.wrapperState === EWrapperState.OPEN
+    ) {
+      // Setting the animation CSS class.
       const animationClassName_Close = this.animationClassNames.close
       this.setState({
         animationClassName: animationClassName_Close
-      })
-      /**
-       * Timeout to let the animation play, then unmount modal, hide the modal, and release scroll lock.
-       */
+      });
+      // Timeout to let the animation play, then unmount modal, hide the modal, and release scroll lock.
       this.UnmountTimeout = setTimeout(() => {
         if (!this.props.open) {
-          modalWatcher.bodyScrollHandler(this.myModalId, EModalHandlers.ENABLE)
+          modalWatcher.bodyScrollHandler(this.myModalId, EModalHandlers.ENABLE);
         }
-        this.setState({
-          wrapperClassName: classes.Null,
-        })
-      }, this.animationDuration)
+        this.setState({ wrapperState: EWrapperState.CLOSED });
+      }, this.animationDuration);
     }
   }
 
@@ -208,8 +206,8 @@ export default class Modal extends React.PureComponent<IModalProps, IModalState>
    * Also clearTimeout, if any.
    */
   componentWillUnmount() {
-    modalWatcher.removeModal(this.myModalId, this.props.open)
-    clearTimeout(this.UnmountTimeout)
+    modalWatcher.removeModal(this.myModalId, this.props.open);
+    clearTimeout(this.UnmountTimeout);
   }
 
   render() {
@@ -218,7 +216,8 @@ export default class Modal extends React.PureComponent<IModalProps, IModalState>
       <Portal domNode={this.props.bodyRef}>
         <div
           ref={this.myModal}
-          className={this.state.wrapperClassName} >
+          className={this.state.wrapperState === EWrapperState.OPEN ? classes.Wrapper : classes.Null}
+        >
           <div 
             onClick={this.props.closeModal} 
             className={classes.Overlay}
@@ -228,51 +227,45 @@ export default class Modal extends React.PureComponent<IModalProps, IModalState>
                 : 'unset',
               transitionDuration: `${this.animationDuration}ms`,
               alignItems: this.props.center ? 'center' : undefined
-            }} >
-            <div className={classes.Container} >
+            }}
+          >
+            <div className={classes.Container}>
               <div
-                /**
-                 * Stopping propagation to stop the ModalWrapper closeModal execution from triggering upon
-                 * interacting with the modal's children elements.
-                 */
-                onClick={(e) => { e.stopPropagation() }}
+                onClick={stopPropagation}
                 style={{
                   transitionDuration: `${this.animationDuration}ms`,
                   animationDuration: `${this.animationDuration}ms`,
-                  /**
-                   * Transparent  styling.
-                   */
+                  // Transparent  styling.
                   border: this.props.transparent ? 'none' : undefined,
                   background: this.props.transparent ? 'none' : this.props.modalBackgroundColor,
-                  maxWidth: this.props.modalMaxWidth
+                  maxWidth: this.props.modalMaxWidth,
                 }}
                 className={[
                   classes.Modal, 
                   this.props.className || classes.Aesthetics, 
-                  this.state.animationClassName
-                  ].join(' ')}>
-                {noCancel ? null
-                  : (
-                    <div className={classes.CloseButtonWrapper}>
-                      <button
-                        type='button'
-                        onClick={this.props.closeModal}
-                        className={classes.CloseButton}
-                        aria-busy='false' >
-                        <Cancel />
-                      </button>
-                    </div>
-                  )}
-                <section>
-                  <Content open={this.props.open}>
-                    {this.props.children}
-                  </Content>
-                </section>
+                  this.state.animationClassName,
+                ].join(' ')}
+                >
+                {noCancel ?
+                  null : (
+                  <div className={classes.CloseButtonWrapper}>
+                    <button
+                      type='button'
+                      onClick={this.props.closeModal}
+                      className={classes.CloseButton}
+                      aria-busy='false' >
+                      <Cancel />
+                    </button>
+                  </div>
+                )}
+                <Content open={this.props.open}>
+                  {this.props.children}
+                </Content>
               </div>
             </div>
           </div>
         </div>
       </Portal>
-    )
+    );
   }
 }

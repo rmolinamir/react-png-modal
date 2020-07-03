@@ -1,6 +1,6 @@
 # React Plug-N'-Go Modal
 
-> Renders a mode that disables the main window but keeps it visible, with a react.js component modal window as a child window in front of it capable of rendering any children passed to it.
+> React.js Modal component.
 
 [![NPM](https://img.shields.io/npm/v/react-png-modal.svg)](https://www.npmjs.com/package/react-png-modal) [![JavaScript Style Guide](https://img.shields.io/badge/code_style-standard-brightgreen.svg)](https://standardjs.com)
 
@@ -9,12 +9,6 @@
 ```bash
 npm install --save react-png-modal
 ```
-
-## [Showcase](https://www.robertmolina.dev/codelab/react-png-modal)
-
-### [Servify](https://www.servifyapp.com "Servify Website")
-
-![Alt Text](https://media.giphy.com/media/5UMF6RMefKDFWMKJ3Y/giphy.gif)
 
 ## Instructions
 
@@ -81,9 +75,8 @@ background-color: var(--modal-overlay-color, rgba(0,0,0,.7)
 [![Edit React Plug N' Go Modal](https://codesandbox.io/static/img/play-codesandbox.svg)](https://codesandbox.io/s/31wj9p56qm?fontsize=14)
 
 ```jsx
-import React, { Component } from 'react'
-
-import Modal from 'react-png-modal'
+import React, { Component } from 'react';
+import Modal from 'react-png-modal';
 
 class Example extends Component {
   state = {
@@ -93,13 +86,13 @@ class Example extends Component {
   openModal = () => {
     this.setState({
       bIsModalOpen: true
-    })
+    });
   }
 
   closeModal = () => {
     this.setState({
       bIsModalOpen: false
-    })
+    });
   }
 
   render () {
@@ -114,7 +107,7 @@ class Example extends Component {
           <button onClick={this.openModal}>Toggle Modal</button>
         </div>
       </React.Fragment>
-    )
+    );
   }
 }
 ```
@@ -122,12 +115,11 @@ class Example extends Component {
 ## Alternative that uses React Hooks
 
 ```jsx
-import React, { useState } from 'react'
-
+import React from 'react'
 import Modal from 'react-png-modal'
 
-const HookedModal = () => {
-  const [bIsModalOpen, setIsModalOpen] = useState(false)
+function HookedModal() {
+  const [bIsModalOpen, setIsModalOpen] = React.useState(false);
 
   return (
     <>
@@ -140,7 +132,7 @@ const HookedModal = () => {
         <button onClick={() => setIsModalOpen(true)}>Open Modal</button>
       </div>
     </>
-  )
+  );
 }
 ```
 
